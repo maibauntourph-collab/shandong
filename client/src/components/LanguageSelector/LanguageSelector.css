@@ -1,0 +1,131 @@
+.language-selector {
+    position: relative;
+}
+
+.language-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    color: inherit;
+}
+
+.language-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--gold);
+}
+
+.lang-flag {
+    font-size: 1.1rem;
+}
+
+.lang-code {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.lang-arrow {
+    font-size: 0.6rem;
+    transition: transform 0.2s ease;
+}
+
+.lang-arrow.open {
+    transform: rotate(180deg);
+}
+
+.language-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 140px;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 1000;
+    animation: dropdownFadeIn 0.2s ease;
+    list-style: none;
+    padding: 8px;
+    margin: 0;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.language-option:hover {
+    background: var(--cream);
+}
+
+.language-option.active {
+    background: var(--gradient-gold);
+    color: var(--white);
+}
+
+.language-option .lang-flag {
+    font-size: 1.2rem;
+}
+
+.language-option .lang-name {
+    font-weight: 500;
+}
+
+/* 헤더 스크롤 시 스타일 */
+.nav-header.scrolled .language-toggle {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.nav-header.scrolled .language-toggle:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: var(--gold);
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+    .language-selector {
+        order: 1;
+    }
+
+    .lang-code {
+        display: none;
+    }
+
+    .language-toggle {
+        padding: 8px;
+    }
+
+    .language-dropdown {
+        right: 0;
+        left: auto;
+    }
+}

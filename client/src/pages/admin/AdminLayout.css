@@ -1,0 +1,104 @@
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background: var(--cream);
+}
+
+.admin-main {
+    flex: 1;
+    padding: var(--space-6);
+}
+
+.admin-main.with-sidebar {
+    margin-left: 260px;
+}
+
+/* Page Header */
+.admin-page-header {
+    margin-bottom: var(--space-8);
+}
+
+.admin-page-title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2);
+}
+
+.admin-page-subtitle {
+    color: var(--text-secondary);
+}
+
+/* Admin Cards */
+.admin-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-6);
+}
+
+/* Tables */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--cream-dark);
+}
+
+.admin-table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.admin-table tbody tr:hover {
+    background: var(--cream);
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 500;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.contacted {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-badge.confirmed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.completed {
+    background: #cce5ff;
+    color: #004085;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .admin-main.with-sidebar {
+        margin-left: 0;
+        padding-top: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-main {
+        padding: var(--space-4);
+    }
+}

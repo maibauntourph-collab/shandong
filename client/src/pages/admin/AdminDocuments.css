@@ -1,0 +1,144 @@
+.admin-documents {
+    max-width: 900px;
+}
+
+/* Upload Zone */
+.upload-zone {
+    background: var(--white);
+    border: 2px dashed var(--cream-dark);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    margin-bottom: var(--space-6);
+}
+
+.upload-zone:hover,
+.upload-zone.active {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(255, 240, 235, 0.5), rgba(230, 215, 255, 0.5));
+}
+
+.upload-zone.uploading {
+    cursor: not-allowed;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-3);
+}
+
+.upload-text {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+}
+
+.upload-hint {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+/* Upload Progress */
+.upload-progress {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--cream-dark);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-gold);
+    transition: width 0.3s ease;
+}
+
+/* Document List */
+.admin-card h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+}
+
+.document-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.document-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--cream);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+}
+
+.document-item:hover {
+    background: var(--lavender);
+}
+
+.doc-icon {
+    font-size: 1.5rem;
+}
+
+.doc-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.doc-name {
+    font-weight: 500;
+    font-size: var(--text-sm);
+}
+
+.doc-meta {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+}
+
+.doc-delete {
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.doc-delete:hover {
+    background: #fee2e2;
+}
+
+.empty-state .hint {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-top: var(--space-2);
+}
+
+/* Info Card */
+.info-card {
+    background: linear-gradient(135deg, var(--lavender), var(--cream));
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    margin-top: var(--space-6);
+}
+
+.info-card h4 {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-2);
+}
+
+.info-card p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+}

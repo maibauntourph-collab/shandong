@@ -1,0 +1,80 @@
+.admin-customers {
+    max-width: 1200px;
+}
+
+.search-form {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.search-input {
+    flex: 1;
+    max-width: 400px;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--cream-dark);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.customer-name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-gold);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--text-sm);
+}
+
+.inquiry-count {
+    font-weight: 600;
+    color: var(--gold-dark);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--cream-dark);
+}
+
+.page-btn {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.page-btn:hover:not(:disabled) {
+    background: var(--cream);
+    color: var(--dark);
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}

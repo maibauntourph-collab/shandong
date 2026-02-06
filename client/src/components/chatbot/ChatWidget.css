@@ -1,0 +1,121 @@
+.chat-widget {
+    position: fixed;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    z-index: var(--z-modal);
+}
+
+/* Toggle Button */
+.chat-toggle {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-gold);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.chat-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
+}
+
+.chat-toggle.active {
+    background: var(--dark);
+    box-shadow: var(--shadow-lg);
+}
+
+.chat-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #e74c3c;
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--white);
+}
+
+/* Pulse Effect */
+.chat-pulse {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    background: var(--gold);
+    opacity: 0.3;
+    animation: chatPulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes chatPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* Minimized State */
+.chat-minimized {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.chat-minimized:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.minimized-icon {
+    font-size: 1.2rem;
+}
+
+.minimized-text {
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .chat-widget {
+        bottom: var(--space-4);
+        right: var(--space-4);
+    }
+
+    .chat-toggle {
+        width: 56px;
+        height: 56px;
+    }
+
+    .chat-pulse {
+        width: 56px;
+        height: 56px;
+    }
+}
