@@ -1,4 +1,5 @@
 {
+  "homepage": "https://maibauntourph-collab.github.io/shandong/",
   "name": "out-catering",
   "version": "1.0.0",
   "private": true,
@@ -24,6 +25,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.2.3",
+    "serverless-http": "^4.0.0",
     "uuid": "^10.0.0",
     "wouter": "^3.3.5",
     "xlsx": "^0.18.5",
