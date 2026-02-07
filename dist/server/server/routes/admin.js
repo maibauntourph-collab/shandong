@@ -1,30 +1,29 @@
-import { Router } from 'express';
-import { getDB } from '../db.js';
-import { ObjectId } from 'mongodb';
-import crypto from 'crypto';
-
-const router = Router();
-
-// Simple password hashing (in production, use bcrypt)
-const hashPassword = (password: string): string => {
-    return crypto.createHash('sha256').update(password).digest('hex');
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const db_js_1 = require("../db.js");
+const mongodb_1 = require("mongodb");
+const crypto_1 = __importDefault(require("crypto"));
+const router = (0, express_1.Router)();
+// Simple password hashing (in production, use bcrypt)
+const hashPassword = (password) => {
+    return crypto_1.default.createHash('sha256').update(password).digest('hex');
+};
 // Admin login
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-
         if (!username || !password) {
             return res.status(400).json({
                 success: false,
                 error: '아이디와 비밀번호를 입력해주세요.'
             });
         }
-
-        const db = getDB();
+        const db = (0, db_js_1.getDB)();
         const admin = await db.collection('adminUsers').findOne({ username });
-
         if (!admin) {
             // Create default admin if none exists
             if (username === 'admin' && password === 'admin1234') {
@@ -34,7 +33,6 @@ router.post('/login', async (req, res) => {
                     role: 'admin',
                     createdAt: new Date(),
                 });
-
                 return res.json({
                     success: true,
                     data: {
@@ -45,13 +43,10 @@ router.post('/login', async (req, res) => {
             }
             return res.status(401).json({ success: false, error: '로그인 정보가 올바르지 않습니다.' });
         }
-
-        const adminData = admin as any;
-
+        const adminData = admin;
         if (adminData.password !== hashPassword(password)) {
             return res.status(401).json({ success: false, error: '로그인 정보가 올바르지 않습니다.' });
         }
-
         res.json({
             success: true,
             data: {
@@ -59,39 +54,31 @@ router.post('/login', async (req, res) => {
                 user: { username: adminData.username, role: adminData.role },
             },
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ success: false, error: '로그인 실패' });
     }
 });
-
 // Dashboard stats
 router.get('/stats', async (req, res) => {
     try {
-        const db = getDB();
-
-        const [
-            totalInquiries,
-            pendingInquiries,
-            totalDocuments,
-            totalCustomers,
-        ] = await Promise.all([
+        const db = (0, db_js_1.getDB)();
+        const [totalInquiries, pendingInquiries, totalDocuments, totalCustomers,] = await Promise.all([
             db.collection('inquiries').countDocuments(),
             db.collection('inquiries').countDocuments({ status: 'pending' }),
             db.collection('documents').countDocuments(),
             db.collection('inquiries').aggregate([
                 { $group: { _id: '$email' } },
                 { $count: 'total' },
-            ]).toArray().then(r => (r[0] as any)?.total || 0),
+            ]).toArray().then(r => r[0]?.total || 0),
         ]);
-
         // Recent inquiries
         const recentInquiries = await db.collection('inquiries')
             .find()
             .sort({ createdAt: -1 })
             .limit(5)
             .toArray();
-
         res.json({
             success: true,
             data: {
@@ -104,20 +91,19 @@ router.get('/stats', async (req, res) => {
                 recentInquiries,
             },
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Stats error:', error);
         res.status(500).json({ success: false, error: '통계 조회 실패' });
     }
 });
-
 // Customer management - Get all customers
 router.get('/customers', async (req, res) => {
     try {
         const { page = '1', limit = '20', search = '' } = req.query;
-        const db = getDB();
-
+        const db = (0, db_js_1.getDB)();
         // Aggregate inquiries by customer email
-        const pipeline: object[] = [
+        const pipeline = [
             {
                 $group: {
                     _id: '$email',
@@ -130,7 +116,6 @@ router.get('/customers', async (req, res) => {
             },
             { $sort: { lastInquiry: -1 } },
         ];
-
         if (search) {
             pipeline.unshift({
                 $match: {
@@ -142,26 +127,22 @@ router.get('/customers', async (req, res) => {
                 },
             });
         }
-
-        const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
-
+        const skip = (parseInt(page) - 1) * parseInt(limit);
         const customers = await db.collection('inquiries')
             .aggregate([
-                ...pipeline,
-                { $skip: skip },
-                { $limit: parseInt(limit as string) },
-            ])
+            ...pipeline,
+            { $skip: skip },
+            { $limit: parseInt(limit) },
+        ])
             .toArray();
-
         const totalResult = await db.collection('inquiries')
             .aggregate([...pipeline, { $count: 'total' }])
             .toArray();
-        const total = (totalResult[0] as any)?.total || 0;
-
+        const total = totalResult[0]?.total || 0;
         res.json({
             success: true,
             data: customers.map(c => {
-                const customer = c as any;
+                const customer = c;
                 return {
                     email: customer._id,
                     name: customer.name,
@@ -172,64 +153,59 @@ router.get('/customers', async (req, res) => {
                 };
             }),
             pagination: {
-                page: parseInt(page as string),
-                limit: parseInt(limit as string),
+                page: parseInt(page),
+                limit: parseInt(limit),
                 total,
-                totalPages: Math.ceil(total / parseInt(limit as string)),
+                totalPages: Math.ceil(total / parseInt(limit)),
             },
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Get customers error:', error);
         res.status(500).json({ success: false, error: '고객 목록 조회 실패' });
     }
 });
-
 // Notice (게시판) CRUD
 router.get('/notices', async (req, res) => {
     try {
         const { page = '1', limit = '10' } = req.query;
-        const db = getDB();
-
-        const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
-
+        const db = (0, db_js_1.getDB)();
+        const skip = (parseInt(page) - 1) * parseInt(limit);
         const [notices, total] = await Promise.all([
             db.collection('notices')
                 .find()
                 .sort({ createdAt: -1 })
                 .skip(skip)
-                .limit(parseInt(limit as string))
+                .limit(parseInt(limit))
                 .toArray(),
             db.collection('notices').countDocuments(),
         ]);
-
         res.json({
             success: true,
             data: notices,
             pagination: {
-                page: parseInt(page as string),
-                limit: parseInt(limit as string),
+                page: parseInt(page),
+                limit: parseInt(limit),
                 total,
-                totalPages: Math.ceil(total / parseInt(limit as string)),
+                totalPages: Math.ceil(total / parseInt(limit)),
             },
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Get notices error:', error);
         res.status(500).json({ success: false, error: '공지사항 조회 실패' });
     }
 });
-
 router.post('/notices', async (req, res) => {
     try {
         const { title, content, isPublished = true } = req.body;
-
         if (!title || !content) {
             return res.status(400).json({
                 success: false,
                 error: '제목과 내용을 입력해주세요.'
             });
         }
-
-        const db = getDB();
+        const db = (0, db_js_1.getDB)();
         const notice = {
             title,
             content,
@@ -237,65 +213,56 @@ router.post('/notices', async (req, res) => {
             createdAt: new Date(),
             updatedAt: new Date(),
         };
-
         const result = await db.collection('notices').insertOne(notice);
-
         res.status(201).json({
             success: true,
             data: { id: result.insertedId },
             message: '공지사항이 등록되었습니다.',
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Create notice error:', error);
         res.status(500).json({ success: false, error: '공지사항 등록 실패' });
     }
 });
-
 router.put('/notices/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { title, content, isPublished } = req.body;
-        const db = getDB();
-
-        const updateData: Record<string, unknown> = { updatedAt: new Date() };
-        if (title) updateData.title = title;
-        if (content) updateData.content = content;
-        if (isPublished !== undefined) updateData.isPublished = isPublished;
-
-        const result = await db.collection('notices').updateOne(
-            { _id: new ObjectId(id) },
-            { $set: updateData }
-        );
-
+        const db = (0, db_js_1.getDB)();
+        const updateData = { updatedAt: new Date() };
+        if (title)
+            updateData.title = title;
+        if (content)
+            updateData.content = content;
+        if (isPublished !== undefined)
+            updateData.isPublished = isPublished;
+        const result = await db.collection('notices').updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: updateData });
         if (result.matchedCount === 0) {
             return res.status(404).json({ success: false, error: '공지사항을 찾을 수 없습니다.' });
         }
-
         res.json({ success: true, message: '공지사항이 수정되었습니다.' });
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Update notice error:', error);
         res.status(500).json({ success: false, error: '공지사항 수정 실패' });
     }
 });
-
 router.delete('/notices/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const db = getDB();
-
+        const db = (0, db_js_1.getDB)();
         const result = await db.collection('notices').deleteOne({
-            _id: new ObjectId(id)
+            _id: new mongodb_1.ObjectId(id)
         });
-
         if (result.deletedCount === 0) {
             return res.status(404).json({ success: false, error: '공지사항을 찾을 수 없습니다.' });
         }
-
         res.json({ success: true, message: '공지사항이 삭제되었습니다.' });
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Delete notice error:', error);
         res.status(500).json({ success: false, error: '공지사항 삭제 실패' });
     }
 });
-
-export default router;
+exports.default = router;
