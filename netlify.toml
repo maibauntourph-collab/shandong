@@ -5,6 +5,7 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  external_node_modules = ["cohere-ai", "ollama"]
 
 # Redirect API requests to the Netlify Function
 [[redirects]]
