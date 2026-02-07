@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
         const sessionsCollection = db.collection('chatSessions');
 
         // Get or create session
-        let session = await sessionsCollection.findOne({ sessionId });
+        let session: any = await sessionsCollection.findOne({ sessionId });
         if (!session) {
             session = {
                 sessionId,
@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
                     },
                 },
                 $set: { updatedAt: new Date() },
-            }
+            } as any
         );
 
         res.json({

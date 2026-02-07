@@ -285,7 +285,7 @@ router.put('/notices/:id', async (req, res) => {
         if (isPublished !== undefined) updateData.isPublished = isPublished;
 
         const result = await db.collection('notices').updateOne(
-            { _id: new ObjectId(id) },
+            { _id: new ObjectId(id) } as any,
             { $set: updateData }
         );
 
@@ -308,7 +308,7 @@ router.delete('/notices/:id', async (req, res) => {
 
         const result = await db.collection('notices').deleteOne({
             _id: new ObjectId(id)
-        });
+        } as any);
 
         if (result.deletedCount === 0) {
             return res.status(404).json({ success: false, error: '공지사항을 찾을 수 없습니다.' });

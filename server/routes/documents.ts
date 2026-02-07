@@ -138,7 +138,7 @@ router.delete('/:id', async (req, res) => {
 
         const document = await db.collection('documents').findOne({
             _id: new ObjectId(id)
-        });
+        } as any);
 
         if (!document) {
             return res.status(404).json({ success: false, error: '문서를 찾을 수 없습니다.' });
@@ -154,7 +154,7 @@ router.delete('/:id', async (req, res) => {
         }
 
         // Delete from MongoDB
-        await db.collection('documents').deleteOne({ _id: new ObjectId(id) });
+        await db.collection('documents').deleteOne({ _id: new ObjectId(id) } as any);
 
         // TODO: Delete from vector database
 

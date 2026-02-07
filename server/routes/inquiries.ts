@@ -101,7 +101,7 @@ router.get('/:id', async (req, res) => {
 
         const inquiry = await db.collection('inquiries').findOne({
             _id: new ObjectId(id)
-        });
+        } as any);
 
         if (!inquiry) {
             return res.status(404).json({ success: false, error: '문의를 찾을 수 없습니다.' });
@@ -127,7 +127,7 @@ router.patch('/:id', async (req, res) => {
         if (notes !== undefined) updateData.notes = notes;
 
         const result = await db.collection('inquiries').updateOne(
-            { _id: new ObjectId(id) },
+            { _id: new ObjectId(id) } as any,
             { $set: updateData }
         );
 
@@ -151,7 +151,7 @@ router.delete('/:id', async (req, res) => {
 
         const result = await db.collection('inquiries').deleteOne({
             _id: new ObjectId(id)
-        });
+        } as any);
 
         if (result.deletedCount === 0) {
             return res.status(404).json({ success: false, error: '문의를 찾을 수 없습니다.' });
