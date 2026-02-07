@@ -1,14 +1,12 @@
 import { Router } from 'express';
 import { getDB } from '../db.js';
 import { ObjectId } from 'mongodb';
-import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = Router();
-
-// Simple password hashing (in production, use bcrypt)
-const hashPassword = (password: string): string => {
-    return crypto.createHash('sha256').update(password).digest('hex');
-};
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
 
 // Admin login
 router.post('/login', async (req, res) => {
@@ -23,22 +21,30 @@ router.post('/login', async (req, res) => {
         }
 
         const db = getDB();
+        if (!db) {
+            return res.status(500).json({ success: false, error: '데이터베이스 연결 오류' });
+        }
+
         const admin = await db.collection('adminUsers').findOne({ username });
 
         if (!admin) {
-            // Create default admin if none exists
+            // Create default admin if none exists AND it's the specific default credential attempt
+            // This is for initial setup convenience. In strict production, might want to remove or secure this.
             if (username === 'admin' && password === 'admin1234') {
+                const hashedPassword = await bcrypt.hash('admin1234', 10);
                 await db.collection('adminUsers').insertOne({
                     username: 'admin',
-                    password: hashPassword('admin1234'),
+                    password: hashedPassword,
                     role: 'admin',
                     createdAt: new Date(),
                 });
 
+                const token = jwt.sign({ username: 'admin', role: 'admin' }, JWT_SECRET, { expiresIn: '12h' });
+
                 return res.json({
                     success: true,
                     data: {
-                        token: 'admin-token-' + Date.now(),
+                        token,
                         user: { username: 'admin', role: 'admin' },
                     },
                 });
@@ -47,15 +53,22 @@ router.post('/login', async (req, res) => {
         }
 
         const adminData = admin as any;
+        const isMatch = await bcrypt.compare(password, adminData.password);
 
-        if (adminData.password !== hashPassword(password)) {
+        if (!isMatch) {
             return res.status(401).json({ success: false, error: '로그인 정보가 올바르지 않습니다.' });
         }
+
+        const token = jwt.sign(
+            { username: adminData.username, role: adminData.role },
+            JWT_SECRET,
+            { expiresIn: '12h' }
+        );
 
         res.json({
             success: true,
             data: {
-                token: 'admin-token-' + Date.now(),
+                token,
                 user: { username: adminData.username, role: adminData.role },
             },
         });
@@ -65,10 +78,14 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Protect all following routes
+router.use(authenticateToken as any);
+
 // Dashboard stats
 router.get('/stats', async (req, res) => {
     try {
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const [
             totalInquiries,
@@ -115,6 +132,7 @@ router.get('/customers', async (req, res) => {
     try {
         const { page = '1', limit = '20', search = '' } = req.query;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         // Aggregate inquiries by customer email
         const pipeline: object[] = [
@@ -189,6 +207,7 @@ router.get('/notices', async (req, res) => {
     try {
         const { page = '1', limit = '10' } = req.query;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
 
@@ -230,6 +249,8 @@ router.post('/notices', async (req, res) => {
         }
 
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
+
         const notice = {
             title,
             content,
@@ -256,6 +277,7 @@ router.put('/notices/:id', async (req, res) => {
         const { id } = req.params;
         const { title, content, isPublished } = req.body;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const updateData: Record<string, unknown> = { updatedAt: new Date() };
         if (title) updateData.title = title;
@@ -282,6 +304,7 @@ router.delete('/notices/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const result = await db.collection('notices').deleteOne({
             _id: new ObjectId(id)

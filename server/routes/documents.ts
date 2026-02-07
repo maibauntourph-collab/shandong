@@ -7,6 +7,7 @@ import { addDocumentToVectorDB } from '../services/vectordb.js';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs/promises';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -47,14 +48,17 @@ const upload = multer({
     },
 });
 
+// Protect all document routes
+router.use(authenticateToken as any);
+
 // Upload and process document
 router.post('/upload', upload.single('file'), async (req, res) => {
     try {
-        if (!req.file) {
+        if (!(req as any).file) {
             return res.status(400).json({ success: false, error: '파일이 필요합니다.' });
         }
 
-        const { originalname, filename, path: filePath, mimetype, size } = req.file;
+        const { originalname, filename, path: filePath, mimetype, size } = (req as any).file;
 
         // Parse document content
         const fileBuffer = await fs.readFile(filePath);
@@ -75,6 +79,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
         // Save document metadata to MongoDB
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
+
         const document = {
             filename,
             originalName: originalname,
@@ -109,6 +115,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
+
         const documents = await db.collection('documents')
             .find()
             .sort({ uploadedAt: -1 })
@@ -126,6 +134,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const document = await db.collection('documents').findOne({
             _id: new ObjectId(id)

@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { getDB } from '../db.js';
 import { ObjectId } from 'mongodb';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = Router();
 
-// Create inquiry
+// Create inquiry (Public)
 router.post('/', async (req, res) => {
     try {
         const { name, email, phone, eventDate, guestCount, eventType, budget, message } = req.body;
@@ -17,6 +18,10 @@ router.post('/', async (req, res) => {
         }
 
         const db = getDB();
+        if (!db) {
+            return res.status(500).json({ success: false, error: '시스템 오류' });
+        }
+
         const inquiry = {
             name,
             email,
@@ -44,11 +49,15 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Admin routes - Require Authentication
+router.use(authenticateToken as any);
+
 // Get all inquiries (admin)
 router.get('/', async (req, res) => {
     try {
         const { status, page = '1', limit = '20' } = req.query;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const filter: Record<string, unknown> = {};
         if (status && status !== 'all') {
@@ -88,6 +97,7 @@ router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const inquiry = await db.collection('inquiries').findOne({
             _id: new ObjectId(id)
@@ -110,8 +120,9 @@ router.patch('/:id', async (req, res) => {
         const { id } = req.params;
         const { status, notes } = req.body;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
-        const updateData: Record<string, unknown> = { updatedAt: new Date() };
+        const updateData: any = { updatedAt: new Date() };
         if (status) updateData.status = status;
         if (notes !== undefined) updateData.notes = notes;
 
@@ -136,6 +147,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const db = getDB();
+        if (!db) throw new Error('DB not connected');
 
         const result = await db.collection('inquiries').deleteOne({
             _id: new ObjectId(id)

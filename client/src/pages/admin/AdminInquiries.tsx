@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './AdminInquiries.css';
+import { api } from '../../lib/api';
 
 interface Inquiry {
     _id: string;
@@ -19,47 +20,78 @@ interface Inquiry {
 const AdminInquiries = () => {
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [filter, setFilter] = useState('all');
+    const [filterStatus, setFilterStatus] = useState('all'); // Renamed from 'filter'
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+    const [page, setPage] = useState(1); // New state for pagination
+    const [totalPages, setTotalPages] = useState(1); // New state for pagination
 
     useEffect(() => {
         fetchInquiries();
-    }, [filter]);
+    }, [filterStatus, page]); // Updated dependencies
 
     const fetchInquiries = async () => {
+        setIsLoading(true); // Set loading true at the start of fetch
         try {
-            const url = filter === 'all'
-                ? '/api/inquiries'
-                : `/api/inquiries?status=${filter}`;
-            const response = await fetch(url);
+            const params = new URLSearchParams({
+                status: filterStatus === 'all' ? '' : filterStatus, // Send empty string for 'all'
+                page: String(page),
+                limit: '20',
+            });
+            const response = await api.get(`/api/inquiries?${params.toString()}`); // Use api.get
             const data = await response.json();
 
             if (data.success) {
                 setInquiries(data.data);
+                setTotalPages(data.pagination.totalPages); // Set total pages
+            } else {
+                console.error('Failed to fetch inquiries:', data.message);
+                setInquiries([]);
+                setTotalPages(1);
             }
         } catch (error) {
             console.error('Fetch error:', error);
+            setInquiries([]);
+            setTotalPages(1);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const updateStatus = async (id: string, status: string) => {
+    const handleStatusUpdate = async (id: string, newStatus: string) => { // Renamed from updateStatus
         try {
-            const response = await fetch(`/api/inquiries/${id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status }),
-            });
+            const response = await api.patch(`/api/inquiries/${id}`, { status: newStatus }); // Use api.patch
+            const data = await response.json();
 
-            if (response.ok) {
-                fetchInquiries();
+            if (data.success) {
+                fetchInquiries(); // Re-fetch to update list and selected inquiry
                 if (selectedInquiry?._id === id) {
-                    setSelectedInquiry({ ...selectedInquiry, status });
+                    setSelectedInquiry({ ...selectedInquiry, status: newStatus });
                 }
+            } else {
+                console.error('Failed to update status:', data.message);
             }
         } catch (error) {
             console.error('Update error:', error);
+        }
+    };
+
+    const deleteInquiry = async (id: string) => { // New function
+        if (!confirm('정말 삭제하시겠습니까?')) return;
+
+        try {
+            const response = await api.delete(`/api/inquiries/${id}`); // Use api.delete
+            const data = await response.json();
+
+            if (data.success) {
+                fetchInquiries();
+                if (selectedInquiry?._id === id) {
+                    setSelectedInquiry(null); // Deselect if deleted
+                }
+            } else {
+                console.error('Failed to delete inquiry:', data.message);
+            }
+        } catch (error) {
+            console.error('Delete error:', error);
         }
     };
 

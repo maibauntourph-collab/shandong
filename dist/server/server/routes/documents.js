@@ -12,6 +12,7 @@ const vectordb_js_1 = require("../services/vectordb.js");
 const uuid_1 = require("uuid");
 const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
+const auth_js_1 = require("../middleware/auth.js");
 const router = (0, express_1.Router)();
 // Configure multer for file uploads
 const storage = multer_1.default.diskStorage({
@@ -50,6 +51,8 @@ const upload = (0, multer_1.default)({
         }
     },
 });
+// Protect all document routes
+router.use(auth_js_1.authenticateToken);
 // Upload and process document
 router.post('/upload', upload.single('file'), async (req, res) => {
     try {
@@ -73,6 +76,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         });
         // Save document metadata to MongoDB
         const db = (0, db_js_1.getDB)();
+        if (!db)
+            throw new Error('DB not connected');
         const document = {
             filename,
             originalName: originalname,
@@ -105,6 +110,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const db = (0, db_js_1.getDB)();
+        if (!db)
+            throw new Error('DB not connected');
         const documents = await db.collection('documents')
             .find()
             .sort({ uploadedAt: -1 })
@@ -121,6 +128,8 @@ router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const db = (0, db_js_1.getDB)();
+        if (!db)
+            throw new Error('DB not connected');
         const document = await db.collection('documents').findOne({
             _id: new mongodb_1.ObjectId(id)
         });

@@ -29,7 +29,7 @@ const AdminLogin = () => {
                 throw new Error(data.error || '로그인에 실패했습니다.');
             }
 
-            login(data.data.user);
+            login(data.data.user, data.data.token);
             setLocation('/admin');
         } catch (err) {
             setError(err instanceof Error ? err.message : '로그인 오류');

@@ -13,7 +13,7 @@ import './AdminLayout.css';
 interface AuthContextType {
     isAuthenticated: boolean;
     user: { username: string; role: string } | null;
-    login: (user: { username: string; role: string }) => void;
+    login: (user: { username: string; role: string }, token: string) => void;
     logout: () => void;
 }
 
@@ -37,18 +37,23 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (savedAuth) {
             try {
                 const parsed = JSON.parse(savedAuth);
-                setIsAuthenticated(true);
-                setUser(parsed.user);
+                // Verify token presence
+                if (parsed.token && parsed.user) {
+                    setIsAuthenticated(true);
+                    setUser(parsed.user);
+                } else {
+                    localStorage.removeItem('adminAuth');
+                }
             } catch (e) {
                 localStorage.removeItem('adminAuth');
             }
         }
     }, []);
 
-    const login = (userData: { username: string; role: string }) => {
+    const login = (userData: { username: string; role: string }, token: string) => {
         setIsAuthenticated(true);
         setUser(userData);
-        localStorage.setItem('adminAuth', JSON.stringify({ user: userData }));
+        localStorage.setItem('adminAuth', JSON.stringify({ user: userData, token }));
     };
 
     const logout = () => {
