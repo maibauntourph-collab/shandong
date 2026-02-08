@@ -1,25 +1,62 @@
-import { useState, FormEvent } from 'react';
-import { useLocation } from 'wouter';
-import { useAuth } from './AdminLayout';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AdminLogin.css';
 
-const AdminLogin = () => {
+const Login: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const { login } = useAuth();
-    const [, setLocation] = useLocation();
+    const [dbConnected, setDbConnected] = useState<boolean | null>(null);
+    const navigate = useNavigate();
 
-    const handleSubmit = async (e: FormEvent) => {
+    // Check database connection on mount
+    useEffect(() => {
+        checkDatabaseConnection();
+    }, []);
+
+    const checkDatabaseConnection = async () => {
+        try {
+            const response = await fetch('/api/health');
+            const data = await response.json();
+
+            if (data.status === 'ok' && data.database === 'connected') {
+                setDbConnected(true);
+                setError('');
+            } else {
+                setDbConnected(false);
+                setError('서버 연결에 문제가 있습니다.');
+            }
+        } catch (err) {
+            console.error('Health check error:', err);
+            setDbConnected(false);
+            setError('서버에 연결할 수 없습니다. 백엔드가 실행 중인지 확인하세요.');
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!username || !password) {
+            setError('아이디와 비밀번호를 입력해주세요.');
+            return;
+        }
+
+        if (dbConnected === false) {
+            setError('데이터베이스 연결 후 다시 시도해주세요.');
+            return;
+        }
+
+        setLoading(true);
         setError('');
-        setIsLoading(true);
 
         try {
             const response = await fetch('/api/admin/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({ username, password }),
             });
 
@@ -29,26 +66,60 @@ const AdminLogin = () => {
                 throw new Error(data.error || '로그인에 실패했습니다.');
             }
 
-            login(data.data.user, data.data.token);
-            setLocation('/admin');
-        } catch (err) {
-            setError(err instanceof Error ? err.message : '로그인 오류');
+            // Store token
+            localStorage.setItem('adminToken', data.data.token);
+            localStorage.setItem('adminUser', JSON.stringify(data.data.user));
+
+            // Redirect to dashboard
+            navigate('/admin/dashboard');
+
+        } catch (err: any) {
+            console.error('Login error:', err);
+            setError(err.message || '로그인 정보가 올바르지 않습니다.');
         } finally {
-            setIsLoading(false);
+            setLoading(false);
         }
     };
 
     return (
-        <div className="admin-login">
-            <div className="login-card glass">
+        <div className="login-container">
+            <div className="login-box">
+                {/* Header */}
                 <div className="login-header">
-                    <h1>🥢 산동 레스토랑</h1>
-                    <p>관리자 로그인</p>
+                    <div className="logo-icon">🥟</div>
+                    <h1>Shandong Restaurant</h1>
+                    <p className="subtitle">관리자 로그인</p>
                 </div>
 
-                <form className="login-form" onSubmit={handleSubmit}>
-                    {error && <div className="login-error">{error}</div>}
+                {/* Database Status */}
+                {dbConnected === null && (
+                    <div className="status-banner status-loading">
+                        <span className="spinner"></span>
+                        서버 연결 확인 중...
+                    </div>
+                )}
 
+                {dbConnected === true && (
+                    <div className="status-banner status-success">
+                        ✅ 서버 연결됨
+                    </div>
+                )}
+
+                {dbConnected === false && (
+                    <div className="status-banner status-error">
+                        ❌ {error}
+                        <button
+                            onClick={checkDatabaseConnection}
+                            className="retry-button"
+                        >
+                            🔄 재시도
+                        </button>
+                    </div>
+                )}
+
+                {/* Login Form */}
+                <form onSubmit={handleSubmit} className="login-form">
+                    {/* Username Field */}
                     <div className="form-group">
                         <label htmlFor="username">아이디</label>
                         <input
@@ -56,34 +127,70 @@ const AdminLogin = () => {
                             id="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder="관리자 아이디"
-                            required
+                            placeholder="관리자 아이디 입력"
+                            disabled={loading || dbConnected === false}
+                            autoComplete="username"
                         />
                     </div>
 
+                    {/* Password Field */}
                     <div className="form-group">
                         <label htmlFor="password">비밀번호</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="비밀번호"
-                            required
-                        />
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="비밀번호 입력"
+                                disabled={loading || dbConnected === false}
+                                autoComplete="current-password"
+                            />
+                            <button
+                                type="button"
+                                className="toggle-password"
+                                onClick={() => setShowPassword(!showPassword)}
+                                disabled={loading || dbConnected === false}
+                            >
+                                {showPassword ? '👁️' : '👁️‍🗨️'}
+                            </button>
+                        </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary login-btn" disabled={isLoading}>
-                        {isLoading ? '로그인 중...' : '로그인'}
-                    </button>
-                </form>
+                    {/* Error Message */}
+                    {error && dbConnected !== false && (
+                        <div className="error-message">
+                            ⚠️ {error}
+                        </div>
+                    )}
 
-                <div className="login-footer">
-                    <p>기본 계정: admin / admin1234</p>
-                </div>
+                    {/* Submit Button */}
+                    <button
+                        type="submit"
+                        className="login-button"
+                        disabled={loading || dbConnected === false}
+                    >
+                        {loading ? (
+                            <>
+                                <span className="spinner-small"></span>
+                                로그인 중...
+                            </>
+                        ) : (
+                            '로그인'
+                        )}
+                    </button>
+
+                    {/* Footer Info */}
+                    <div className="login-footer">
+                        <p className="default-account">
+                            <strong>기본 계정:</strong><br />
+                            admin / admin1234
+                        </p>
+                    </div>
+                </form>
             </div>
         </div>
     );
 };
 
-export default AdminLogin;
+export default Login;

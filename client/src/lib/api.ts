@@ -1,12 +1,7 @@
 const getAuthHeader = () => {
-    const savedAuth = localStorage.getItem('adminAuth');
-    if (savedAuth) {
-        try {
-            const { token } = JSON.parse(savedAuth);
-            return token ? { 'Authorization': `Bearer ${token}` } : {};
-        } catch (e) {
-            return {};
-        }
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+        return { 'Authorization': `Bearer ${token}` };
     }
     return {};
 };

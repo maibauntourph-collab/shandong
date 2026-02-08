@@ -1,47 +1,78 @@
-import { Route, Switch, useLocation } from 'wouter';
-import { LanguageProvider } from './contexts/LanguageContext';
-import Navigation from './components/layout/Navigation';
-import Footer from './components/layout/Footer';
-import ChatWidget from './components/chatbot/ChatWidget';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Quote from './pages/Quote';
-import Contact from './pages/Contact';
-import AdminApp from './pages/admin/AdminLayout';
-
-function AppContent() {
-    const [location] = useLocation();
-    const isAdminRoute = location.startsWith('/admin');
-
-    // Admin 페이지는 별도 레이아웃 사용
-    if (isAdminRoute) {
-        return <AdminApp />;
-    }
-
-    return (
-        <div className="app">
-            <Navigation />
-            <main className="main-content">
-                <Switch>
-                    <Route path="/" component={Home} />
-                    <Route path="/services" component={Services} />
-                    <Route path="/quote" component={Quote} />
-                    <Route path="/contact" component={Contact} />
-                </Switch>
-            </main>
-            <Footer />
-            <ChatWidget />
-        </div>
-    );
-}
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/admin/AdminLogin';
+import Dashboard from './pages/admin/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import './App.css';
 
 function App() {
     return (
-        <LanguageProvider>
-            <AppContent />
-        </LanguageProvider>
+        <Router>
+            <Routes>
+                <Route path="/admin/login" element={<Login />} />
+                <Route
+                    path="/admin/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/inquiries"
+                    element={
+                        <ProtectedRoute>
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                {React.createElement(React.lazy(() => import('./pages/admin/AdminInquiries')))}
+                            </React.Suspense>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/customers"
+                    element={
+                        <ProtectedRoute>
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                {React.createElement(React.lazy(() => import('./pages/admin/AdminCustomers')))}
+                            </React.Suspense>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/documents"
+                    element={
+                        <ProtectedRoute>
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                {React.createElement(React.lazy(() => import('./pages/admin/AdminDocuments')))}
+                            </React.Suspense>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/notices"
+                    element={
+                        <ProtectedRoute>
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                {React.createElement(React.lazy(() => import('./pages/admin/AdminNotices')))}
+                            </React.Suspense>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/menus"
+                    element={
+                        <ProtectedRoute>
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                {React.createElement(React.lazy(() => import('./pages/admin/AdminMenus')))}
+                            </React.Suspense>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/" element={<Navigate to="/admin/login" />} />
+                <Route path="/admin" element={<Navigate to="/admin/login" />} />
+            </Routes>
+        </Router>
     );
 }
 
 export default App;
-

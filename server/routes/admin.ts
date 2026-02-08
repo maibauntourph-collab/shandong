@@ -12,6 +12,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-pro
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
+        console.log(`Login attempt for username: ${username}`);
 
         if (!username || !password) {
             return res.status(400).json({
@@ -22,8 +23,10 @@ router.post('/login', async (req, res) => {
 
         const db = getDB();
         if (!db) {
+            console.error('Login Error: DB is undefined');
             return res.status(500).json({ success: false, error: '데이터베이스 연결 오류' });
         }
+        console.log('DB Connection retrieved. Is Mock:', db.constructor.name === 'MockCollection' ? 'YES' : 'NO');
 
         const admin = await db.collection('adminUsers').findOne({ username });
 
