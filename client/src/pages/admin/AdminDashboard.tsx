@@ -96,15 +96,15 @@ const Dashboard: React.FC = () => {
     return (
         <div className="admin-dashboard">
             {error && (
-                <div className="error-banner">
-                    ❌ {error}
+                <div className="status-banner status-error" style={{ marginBottom: 'var(--space-6)' }}>
+                    ⚠️ {error}
                 </div>
             )}
 
             {/* Stats Grid */}
             {stats && (
                 <div className="stats-grid">
-                    <div className="stat-card">
+                    <div className="stat-card admin-card">
                         <div className="stat-icon" style={{ backgroundColor: '#EEF2FF', color: '#4F46E5' }}>
                             📝
                         </div>
@@ -114,7 +114,7 @@ const Dashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="stat-card">
+                    <div className="stat-card admin-card">
                         <div className="stat-icon" style={{ backgroundColor: '#FEF3C7', color: '#F59E0B' }}>
                             ⏳
                         </div>
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="stat-card">
+                    <div className="stat-card admin-card">
                         <div className="stat-icon" style={{ backgroundColor: '#D1FAE5', color: '#10B981' }}>
                             👥
                         </div>
@@ -134,7 +134,7 @@ const Dashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="stat-card">
+                    <div className="stat-card admin-card">
                         <div className="stat-icon" style={{ backgroundColor: '#FEE2E2', color: '#EF4444' }}>
                             📄
                         </div>
@@ -147,14 +147,14 @@ const Dashboard: React.FC = () => {
             )}
 
             {/* Recent Inquiries */}
-            <div className="dashboard-card">
+            <div className="admin-card">
                 <div className="card-header">
                     <h2>최근 문의</h2>
                     <a href="/admin/inquiries" className="view-all-btn">전체보기 →</a>
                 </div>
-                <div className="inquiries-table">
+                <div className="inquiries-table type-table">
                     {recentInquiries.length > 0 ? (
-                        <table>
+                        <table className="admin-table">
                             <thead>
                                 <tr>
                                     <th>이름</th>
@@ -171,7 +171,7 @@ const Dashboard: React.FC = () => {
                                         <td>{inquiry.email}</td>
                                         <td>{inquiry.phone}</td>
                                         <td>
-                                            <span className={`status-badge ${getStatusClass(inquiry.status)}`}>
+                                            <span className={`status-badge ${inquiry.status}`}>
                                                 {getStatusBadge(inquiry.status)}
                                             </span>
                                         </td>

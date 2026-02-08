@@ -82,37 +82,38 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-box">
+        <div className="admin-login">
+            <div className="login-card"> {/* Renamed from login-box */}
                 {/* Header */}
                 <div className="login-header">
                     <div className="logo-icon">🥟</div>
                     <h1>Shandong Restaurant</h1>
-                    <p className="subtitle">관리자 로그인</p>
+                    <p className="subtitle">Admin Portal</p>
                 </div>
 
                 {/* Database Status */}
                 {dbConnected === null && (
                     <div className="status-banner status-loading">
-                        <span className="spinner"></span>
-                        서버 연결 확인 중...
+                        <span className="spinner-small" style={{ borderColor: '#4B5563', borderTopColor: 'transparent' }}></span>
+                        Connecting...
                     </div>
                 )}
 
                 {dbConnected === true && (
                     <div className="status-banner status-success">
-                        ✅ 서버 연결됨
+                        <span>●</span> System Online
                     </div>
                 )}
 
                 {dbConnected === false && (
                     <div className="status-banner status-error">
-                        ❌ {error}
+                        ⚠️ {error}
                         <button
                             onClick={checkDatabaseConnection}
                             className="retry-button"
+                            title="Retry Connection"
                         >
-                            🔄 재시도
+                            ↻
                         </button>
                     </div>
                 )}
@@ -121,13 +122,13 @@ const Login: React.FC = () => {
                 <form onSubmit={handleSubmit} className="login-form">
                     {/* Username Field */}
                     <div className="form-group">
-                        <label htmlFor="username">아이디</label>
+                        <label htmlFor="username">Username</label>
                         <input
                             type="text"
                             id="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder="관리자 아이디 입력"
+                            placeholder="Enter your admin ID"
                             disabled={loading || dbConnected === false}
                             autoComplete="username"
                         />
@@ -135,16 +136,16 @@ const Login: React.FC = () => {
 
                     {/* Password Field */}
                     <div className="form-group">
-                        <label htmlFor="password">비밀번호</label>
+                        <label htmlFor="password">Password</label>
                         <div className="password-wrapper">
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 id="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="비밀번호 입력"
+                                placeholder="Enter your password"
                                 disabled={loading || dbConnected === false}
-                                autoComplete="current-password"
+                                autocomplete="current-password"
                             />
                             <button
                                 type="button"
@@ -152,14 +153,14 @@ const Login: React.FC = () => {
                                 onClick={() => setShowPassword(!showPassword)}
                                 disabled={loading || dbConnected === false}
                             >
-                                {showPassword ? '👁️' : '👁️‍🗨️'}
+                                {showPassword ? 'Hide' : 'Show'}
                             </button>
                         </div>
                     </div>
 
                     {/* Error Message */}
                     {error && dbConnected !== false && (
-                        <div className="error-message">
+                        <div className="status-banner status-error">
                             ⚠️ {error}
                         </div>
                     )}
@@ -173,18 +174,17 @@ const Login: React.FC = () => {
                         {loading ? (
                             <>
                                 <span className="spinner-small"></span>
-                                로그인 중...
+                                Logging In...
                             </>
                         ) : (
-                            '로그인'
+                            'Access Dashboard'
                         )}
                     </button>
 
                     {/* Footer Info */}
                     <div className="login-footer">
                         <p className="default-account">
-                            <strong>기본 계정:</strong><br />
-                            admin / admin1234
+                            <strong>Demo Access:</strong> admin / admin1234
                         </p>
                     </div>
                 </form>
