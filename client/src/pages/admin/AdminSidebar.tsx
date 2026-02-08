@@ -1,52 +1,62 @@
-import { Link, useLocation } from 'wouter';
-import { useAuth } from './AdminLayout';
+import React from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './AdminSidebar.css';
 
 const menuItems = [
-    { path: '/admin', label: '대시보드', icon: '📊' },
-    { path: '/admin/inquiries', label: '예약/문의 관리', icon: '📝' },
-    { path: '/admin/menus', label: '메뉴 관리', icon: '🍽️' },
+    { path: '/admin/dashboard', label: '대시보드', icon: '📊' },
+    { path: '/admin/inquiries', label: '문의 관리', icon: '📝' },
     { path: '/admin/customers', label: '고객 관리', icon: '👥' },
-    { path: '/admin/documents', label: '문서/벡터DB', icon: '📁' },
-    { path: '/admin/notices', label: '게시판 관리', icon: '📢' },
+    { path: '/admin/documents', label: '문서 관리', icon: '📄' },
+    { path: '/admin/notices', label: '공지사항', icon: '📢' },
+    { path: '/admin/settings', label: '설정', icon: '⚙️' },
 ];
 
-const AdminSidebar = () => {
-    const [location] = useLocation();
-    const { user, logout } = useAuth();
+const AdminSidebar: React.FC = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Get user info from localStorage
+    const userStr = localStorage.getItem('adminUser');
+    const user = userStr ? JSON.parse(userStr) : { username: 'Admin', role: '관리자' };
+
+    const handleLogout = () => {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        navigate('/admin/login');
+    };
 
     return (
-        <aside className="admin-sidebar">
+        <aside className="sidebar">
             <div className="sidebar-header">
-                <Link href="/" className="sidebar-logo">
-                    🥢 <span>산동 레스토랑</span>
-                </Link>
-                <span className="sidebar-badge">Admin</span>
+                <div className="logo">
+                    <span className="logo-icon">🥟</span>
+                    <span className="logo-text">Shandong</span>
+                </div>
             </div>
 
             <nav className="sidebar-nav">
                 {menuItems.map((item) => (
                     <Link
                         key={item.path}
-                        href={item.path}
-                        className={`sidebar-link ${location === item.path ? 'active' : ''}`}
+                        to={item.path}
+                        className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
                     >
-                        <span className="sidebar-icon">{item.icon}</span>
-                        <span className="sidebar-label">{item.label}</span>
+                        <span className="nav-icon">{item.icon}</span>
+                        <span>{item.label}</span>
                     </Link>
                 ))}
             </nav>
 
             <div className="sidebar-footer">
-                <div className="sidebar-user">
-                    <div className="user-avatar">👤</div>
-                    <div className="user-info">
-                        <span className="user-name">{user?.username || 'Admin'}</span>
-                        <span className="user-role">{user?.role || 'Administrator'}</span>
+                <div className="user-info">
+                    <div className="user-avatar">A</div>
+                    <div className="user-details">
+                        <p className="user-name">{user.username}</p>
+                        <p className="user-role">{user.role}</p>
                     </div>
                 </div>
-                <button className="sidebar-logout" onClick={logout}>
-                    로그아웃
+                <button className="logout-btn" onClick={handleLogout}>
+                    <span>🚪</span> 로그아웃
                 </button>
             </div>
         </aside>

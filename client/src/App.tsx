@@ -2,7 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/admin/AdminLogin';
 import Dashboard from './pages/admin/AdminDashboard';
+import AdminLayout from './pages/admin/AdminLayout';
 import ProtectedRoute from './components/ProtectedRoute';
+
+// Lazy load admin pages
+const AdminInquiries = React.lazy(() => import('./pages/admin/AdminInquiries'));
+const AdminCustomers = React.lazy(() => import('./pages/admin/AdminCustomers'));
+const AdminDocuments = React.lazy(() => import('./pages/admin/AdminDocuments'));
+const AdminNotices = React.lazy(() => import('./pages/admin/AdminNotices'));
+const AdminMenus = React.lazy(() => import('./pages/admin/AdminMenus'));
 import './App.css';
 
 function App() {
@@ -10,66 +18,60 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/admin/login" element={<Login />} />
+
+                {/* Admin Routes with Layout */}
                 <Route
-                    path="/admin/dashboard"
                     element={
                         <ProtectedRoute>
-                            <Dashboard />
+                            <AdminLayout />
                         </ProtectedRoute>
                     }
-                />
-                <Route
-                    path="/admin/inquiries"
-                    element={
-                        <ProtectedRoute>
+                >
+                    <Route path="/admin/dashboard" element={<Dashboard />} />
+                    <Route
+                        path="/admin/inquiries"
+                        element={
                             <React.Suspense fallback={<div>Loading...</div>}>
-                                {React.createElement(React.lazy(() => import('./pages/admin/AdminInquiries')))}
+                                <AdminInquiries />
                             </React.Suspense>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/admin/customers"
-                    element={
-                        <ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/customers"
+                        element={
                             <React.Suspense fallback={<div>Loading...</div>}>
-                                {React.createElement(React.lazy(() => import('./pages/admin/AdminCustomers')))}
+                                <AdminCustomers />
                             </React.Suspense>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/admin/documents"
-                    element={
-                        <ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/documents"
+                        element={
                             <React.Suspense fallback={<div>Loading...</div>}>
-                                {React.createElement(React.lazy(() => import('./pages/admin/AdminDocuments')))}
+                                <AdminDocuments />
                             </React.Suspense>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/admin/notices"
-                    element={
-                        <ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/notices"
+                        element={
                             <React.Suspense fallback={<div>Loading...</div>}>
-                                {React.createElement(React.lazy(() => import('./pages/admin/AdminNotices')))}
+                                <AdminNotices />
                             </React.Suspense>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/admin/menus"
-                    element={
-                        <ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/menus"
+                        element={
                             <React.Suspense fallback={<div>Loading...</div>}>
-                                {React.createElement(React.lazy(() => import('./pages/admin/AdminMenus')))}
+                                <AdminMenus />
                             </React.Suspense>
-                        </ProtectedRoute>
-                    }
-                />
+                        }
+                    />
+                </Route>
+
                 <Route path="/" element={<Navigate to="/admin/login" />} />
-                <Route path="/admin" element={<Navigate to="/admin/login" />} />
+                <Route path="/admin" element={<Navigate to="/admin/dashboard" />} />
             </Routes>
         </Router>
     );

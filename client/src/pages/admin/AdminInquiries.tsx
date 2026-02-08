@@ -57,7 +57,7 @@ const AdminInquiries = () => {
         }
     };
 
-    const handleStatusUpdate = async (id: string, newStatus: string) => { // Renamed from updateStatus
+    const updateStatus = async (id: string, newStatus: string) => { // Renamed to match usage
         try {
             const response = await api.patch(`/api/inquiries/${id}`, { status: newStatus }); // Use api.patch
             const data = await response.json();

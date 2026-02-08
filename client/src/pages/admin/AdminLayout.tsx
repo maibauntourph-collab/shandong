@@ -1,133 +1,33 @@
-import { Route, Switch, useLocation, Redirect } from 'wouter';
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import AdminLogin from './AdminLogin';
-import AdminDashboard from './AdminDashboard';
-import AdminInquiries from './AdminInquiries';
-import AdminDocuments from './AdminDocuments';
-import AdminCustomers from './AdminCustomers';
-import AdminNotices from './AdminNotices';
+import React from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
 import './AdminLayout.css';
 
-// Auth Context
-interface AuthContextType {
-    isAuthenticated: boolean;
-    user: { username: string; role: string } | null;
-    login: (user: { username: string; role: string }, token: string) => void;
-    logout: () => void;
-}
+const AdminLayout: React.FC = () => {
+    const navigate = useNavigate();
 
-const AuthContext = createContext<AuthContextType>({
-    isAuthenticated: false,
-    user: null,
-    login: () => { },
-    logout: () => { },
-});
-
-export const useAuth = () => useContext(AuthContext);
-
-// Auth Provider
-const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState<{ username: string; role: string } | null>(null);
-
-    useEffect(() => {
-        // Check for saved auth
-        const savedAuth = localStorage.getItem('adminAuth');
-        if (savedAuth) {
-            try {
-                const parsed = JSON.parse(savedAuth);
-                // Verify token presence
-                if (parsed.token && parsed.user) {
-                    setIsAuthenticated(true);
-                    setUser(parsed.user);
-                } else {
-                    localStorage.removeItem('adminAuth');
-                }
-            } catch (e) {
-                localStorage.removeItem('adminAuth');
-            }
-        }
-    }, []);
-
-    const login = (userData: { username: string; role: string }, token: string) => {
-        setIsAuthenticated(true);
-        setUser(userData);
-        localStorage.setItem('adminAuth', JSON.stringify({ user: userData, token }));
+    const handleRefresh = () => {
+        navigate(0);
     };
-
-    const logout = () => {
-        setIsAuthenticated(false);
-        setUser(null);
-        localStorage.removeItem('adminAuth');
-    };
-
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
-// Protected Route
-const ProtectedRoute = ({ component: Component }: { component: React.FC }) => {
-    const { isAuthenticated } = useAuth();
-    const [, setLocation] = useLocation();
-
-    useEffect(() => {
-        if (!isAuthenticated) {
-            setLocation('/admin/login');
-        }
-    }, [isAuthenticated, setLocation]);
-
-    if (!isAuthenticated) {
-        return null;
-    }
-
-    return <Component />;
-};
-
-const AdminLayout = () => {
-    const { isAuthenticated } = useAuth();
-    const [location] = useLocation();
-    const isLoginPage = location === '/admin/login';
 
     return (
         <div className="admin-layout">
-            {isAuthenticated && !isLoginPage && <AdminSidebar />}
-            <div className={`admin-main ${isAuthenticated && !isLoginPage ? 'with-sidebar' : ''}`}>
-                <Switch>
-                    <Route path="/admin/login" component={AdminLogin} />
-                    <Route path="/admin">
-                        <ProtectedRoute component={AdminDashboard} />
-                    </Route>
-                    <Route path="/admin/inquiries">
-                        <ProtectedRoute component={AdminInquiries} />
-                    </Route>
-                    <Route path="/admin/documents">
-                        <ProtectedRoute component={AdminDocuments} />
-                    </Route>
-                    <Route path="/admin/customers">
-                        <ProtectedRoute component={AdminCustomers} />
-                    </Route>
-                    <Route path="/admin/notices">
-                        <ProtectedRoute component={AdminNotices} />
-                    </Route>
-                    <Route>
-                        <Redirect to="/admin" />
-                    </Route>
-                </Switch>
-            </div>
+            <AdminSidebar />
+            <main className="main-content">
+                <header className="top-bar">
+                    <h1>관리자 대시보드</h1>
+                    <div className="top-bar-actions">
+                        <button className="refresh-btn" onClick={handleRefresh}>
+                            🔄 새로고침
+                        </button>
+                    </div>
+                </header>
+                <div className="content-area">
+                    <Outlet />
+                </div>
+            </main>
         </div>
     );
 };
 
-const AdminApp = () => {
-    return (
-        <AuthProvider>
-            <AdminLayout />
-        </AuthProvider>
-    );
-};
-
-export default AdminApp;
+export default AdminLayout;
