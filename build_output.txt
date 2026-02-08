@@ -1,0 +1,11 @@
+server/routes/admin.ts(105,16): error TS2339: Property 'toArray' does not exist on type 'Promise<{ _id: any; }[]> | AggregationCursor<Document>'.
+  Property 'toArray' does not exist on type 'Promise<{ _id: any; }[]>'.
+server/routes/admin.ts(112,14): error TS2339: Property 'limit' does not exist on type '{ toArray: () => Promise<any[]>; }'.
+server/routes/admin.ts(175,14): error TS2339: Property 'toArray' does not exist on type 'Promise<{ _id: any; }[]> | AggregationCursor<Document>'.
+  Property 'toArray' does not exist on type 'Promise<{ _id: any; }[]>'.
+server/routes/admin.ts(179,14): error TS2339: Property 'toArray' does not exist on type 'Promise<{ _id: any; }[]> | AggregationCursor<Document>'.
+  Property 'toArray' does not exist on type 'Promise<{ _id: any; }[]>'.
+server/routes/admin.ts(221,18): error TS2339: Property 'skip' does not exist on type '{ toArray: () => Promise<any[]>; }'.
+server/routes/admin.ts(295,20): error TS2339: Property 'matchedCount' does not exist on type '{ modifiedCount: number; }'.
+server/routes/inquiries.ts(73,18): error TS2339: Property 'skip' does not exist on type '{ toArray: () => Promise<any[]>; }'.
+server/routes/inquiries.ts(134,20): error TS2339: Property 'matchedCount' does not exist on type '{ modifiedCount: number; }'.

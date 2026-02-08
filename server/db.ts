@@ -38,33 +38,26 @@ class MockCollection {
             return Object.keys(query).every(key => item[key] === query[key]);
         });
 
-        return {
-            toArray: async () => filtered,
+        // Helper to create a chainable cursor-like object
+        const createCursor = (data: any[]) => ({
             sort: (sortOpts: any) => {
-                // Basic sort implementation
-                return {
-                    toArray: async () => filtered.sort((a, b) => {
-                        const key = Object.keys(sortOpts)[0];
-                        return sortOpts[key] === 1 ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1);
-                    })
-                };
+                const sorted = [...data].sort((a, b) => {
+                    const key = Object.keys(sortOpts)[0];
+                    return sortOpts[key] === 1 ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1);
+                });
+                return createCursor(sorted);
             },
             skip: (skipCount: number) => {
-                return {
-                    limit: (limitCount: number) => {
-                        return {
-                            toArray: async () => filtered.slice(skipCount, skipCount + limitCount)
-                        }
-                    },
-                    toArray: async () => filtered.slice(skipCount)
-                }
+                return createCursor(data.slice(skipCount));
             },
             limit: (limitCount: number) => {
-                return {
-                    toArray: async () => filtered.slice(0, limitCount)
-                }
-            }
-        };
+                return createCursor(data.slice(0, limitCount));
+            },
+            toArray: async () => data,
+            count: async () => data.length
+        });
+
+        return createCursor(filtered);
     }
 
     async insertOne(doc: any) {
@@ -87,9 +80,9 @@ class MockCollection {
                     item[key].push(update.$push[key]);
                 }
             }
-            return { modifiedCount: 1 };
+            return { modifiedCount: 1, matchedCount: 1 };
         }
-        return { modifiedCount: 0 };
+        return { modifiedCount: 0, matchedCount: 0 };
     }
 
     async deleteOne(query: any) {
@@ -110,14 +103,19 @@ class MockCollection {
     }
 
     // Mock aggregate for dashboard stats
-    async aggregate(pipeline: any[]) {
+    aggregate(pipeline: any[]) {
         // Very basic mock for specific aggregations we know exist
+        let result = [];
         if (this.name === 'inquiries' && pipeline[0]?.$group?._id === '$email') {
             // Count unique emails
             const uniqueEmails = new Set(this.data.map(i => i.email));
-            return Array.from(uniqueEmails).map(email => ({ _id: email }));
+            result = Array.from(uniqueEmails).map(email => ({ _id: email }));
         }
-        return [];
+
+        // Return a cursor-like object, NOT a Promise directly
+        return {
+            toArray: async () => result
+        };
     }
 }
 
@@ -160,7 +158,7 @@ export const connectDB = async (): Promise<void> => {
     }
 };
 
-export const getDB = () => {
+export const getDB = (): any => {
     if (mongoose.connection.readyState === 1) {
         return mongoose.connection.db;
     }
