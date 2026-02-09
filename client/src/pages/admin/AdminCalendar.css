@@ -1,0 +1,114 @@
+.admin-calendar-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.calendar-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--space-6);
+}
+
+.calendar-container {
+    padding: var(--space-6);
+}
+
+/* React Calendar Overrides */
+.react-calendar {
+    width: 100%;
+    border: none;
+    font-family: var(--font-sans);
+}
+
+.react-calendar__tile {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px !important;
+    position: relative;
+}
+
+.react-calendar__month-view__days__day--weekend {
+    color: #ef4444;
+}
+
+.calendar-badges {
+    display: flex;
+    gap: 2px;
+    position: absolute;
+    bottom: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.calendar-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.calendar-dot.status-confirmed {
+    background-color: #10B981;
+}
+
+.calendar-dot.status-completed {
+    background-color: #6B7280;
+}
+
+.calendar-dot.status-pending {
+    background-color: #F59E0B;
+}
+
+.calendar-dot.status-contacted {
+    background-color: #3B82F6;
+}
+
+/* Event List */
+.event-list {
+    padding: var(--space-6);
+    height: fit-content;
+}
+
+.events-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+.event-card {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--text-muted);
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.event-card.status-confirmed {
+    border-left-color: #10B981;
+    background: #ecfdf5;
+}
+
+.event-card.status-pending {
+    border-left-color: #F59E0B;
+    background: #fffbeb;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-2);
+}
+
+.event-header h4 {
+    margin: 0;
+    font-size: var(--text-base);
+}
+
+@media (max-width: 768px) {
+    .calendar-layout {
+        grid-template-columns: 1fr;
+    }
+}

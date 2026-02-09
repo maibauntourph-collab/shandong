@@ -59,41 +59,47 @@ const AdminCustomers = () => {
     return (
         <div className="admin-customers">
             <div className="admin-page-header">
-                <h1 className="admin-page-title">고객 관리</h1>
-                <p className="admin-page-subtitle">문의 이력이 있는 고객 목록입니다</p>
+                <div>
+                    <h1 className="admin-page-title">Customers <span className="sub-text">고객 관리</span></h1>
+                    <p className="admin-page-subtitle">List of customers who have submitted inquiries.</p>
+                </div>
             </div>
 
             {/* Search */}
             <form className="search-form" onSubmit={handleSearch}>
                 <input
                     type="text"
-                    placeholder="이름, 이메일, 연락처 검색"
+                    placeholder="Search by name, email, phone... (이름, 이메일, 전화번호)"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="search-input"
                 />
-                <button type="submit" className="btn btn-primary">검색</button>
+                <button type="submit" className="admin-button">Search</button>
             </form>
 
             {/* Customer List */}
             <div className="admin-card">
                 {isLoading ? (
-                    <div className="loading">로딩 중...</div>
+                    <div className="admin-loading">
+                        <div className="loading-spinner"></div>
+                        <p>Loading...</p>
+                    </div>
                 ) : customers.length === 0 ? (
                     <div className="empty-state">
-                        <p>등록된 고객이 없습니다.</p>
+                        <p>No customers found.</p>
                     </div>
                 ) : (
                     <>
                         <table className="admin-table">
                             <thead>
                                 <tr>
-                                    <th>고객명</th>
-                                    <th>이메일</th>
-                                    <th>연락처</th>
-                                    <th>총 문의</th>
-                                    <th>최근 문의</th>
-                                    <th>상태</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Inquiries</th>
+                                    <th>Recent</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,15 +114,20 @@ const AdminCustomers = () => {
                                         <td>{customer.email}</td>
                                         <td>{customer.phone}</td>
                                         <td>
-                                            <span className="inquiry-count">{customer.totalInquiries}건</span>
+                                            <span className="inquiry-count">{customer.totalInquiries}</span>
                                         </td>
                                         <td>{formatDate(customer.lastInquiry)}</td>
                                         <td>
                                             {customer.hasConfirmed ? (
-                                                <span className="status-badge confirmed">예약확정</span>
+                                                <span className="status-badge confirmed">Confirmed</span>
                                             ) : (
-                                                <span className="status-badge pending">문의중</span>
+                                                <span className="status-badge pending">Inquiry</span>
                                             )}
+                                        </td>
+                                        <td>
+                                            <a href={`/admin/inquiries?search=${customer.email}`} className="text-blue-500 hover:underline">
+                                                View Orders
+                                            </a>
                                         </td>
                                     </tr>
                                 ))}
@@ -131,7 +142,7 @@ const AdminCustomers = () => {
                                     disabled={page === 1}
                                     onClick={() => setPage(page - 1)}
                                 >
-                                    ← 이전
+                                    &lt; Prev
                                 </button>
                                 <span className="page-info">{page} / {totalPages}</span>
                                 <button
@@ -139,7 +150,7 @@ const AdminCustomers = () => {
                                     disabled={page === totalPages}
                                     onClick={() => setPage(page + 1)}
                                 >
-                                    다음 →
+                                    Next &gt;
                                 </button>
                             </div>
                         )}

@@ -11,6 +11,11 @@ const AdminCustomers = React.lazy(() => import('./pages/admin/AdminCustomers'));
 const AdminDocuments = React.lazy(() => import('./pages/admin/AdminDocuments'));
 const AdminNotices = React.lazy(() => import('./pages/admin/AdminNotices'));
 const AdminMenus = React.lazy(() => import('./pages/admin/AdminMenus'));
+const AdminSettings = React.lazy(() => import('./pages/admin/AdminSettings'));
+const AdminCalendar = React.lazy(() => import('./pages/admin/AdminCalendar'));
+const AdminGallery = React.lazy(() => import('./pages/admin/AdminGallery'));
+const AdminInventory = React.lazy(() => import('./pages/admin/AdminInventory'));
+const AdminAnalytics = React.lazy(() => import('./pages/admin/AdminAnalytics'));
 import './App.css';
 
 function App() {
@@ -65,6 +70,46 @@ function App() {
                         element={
                             <React.Suspense fallback={<div>Loading...</div>}>
                                 <AdminMenus />
+                            </React.Suspense>
+                        }
+                    />
+                    <Route
+                        path="/admin/settings"
+                        element={
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <AdminSettings />
+                            </React.Suspense>
+                        }
+                    />
+                    <Route
+                        path="/admin/calendar"
+                        element={
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <AdminCalendar />
+                            </React.Suspense>
+                        }
+                    />
+                    <Route
+                        path="/admin/gallery"
+                        element={
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <AdminGallery />
+                            </React.Suspense>
+                        }
+                    />
+                    <Route
+                        path="/admin/inventory"
+                        element={
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <AdminInventory />
+                            </React.Suspense>
+                        }
+                    />
+                    <Route
+                        path="/admin/analytics"
+                        element={
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <AdminAnalytics />
                             </React.Suspense>
                         }
                     />

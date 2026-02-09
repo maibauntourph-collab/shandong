@@ -1,233 +1,235 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import './AdminInquiries.css';
 import { api } from '../../lib/api';
-
-interface Inquiry {
-    _id: string;
-    name: string;
-    email: string;
-    phone: string;
-    eventDate: string;
-    guestCount: number;
-    eventType: string;
-    budget: string;
-    message: string;
-    status: string;
-    notes?: string;
-    createdAt: string;
-}
+import { Inquiry, EventLogistics } from '@shared/types';
 
 const AdminInquiries = () => {
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [filterStatus, setFilterStatus] = useState('all'); // Renamed from 'filter'
+    const [filterStatus, setFilterStatus] = useState('all');
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
-    const [page, setPage] = useState(1); // New state for pagination
-    const [totalPages, setTotalPages] = useState(1); // New state for pagination
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const [searchParams] = useSearchParams();
+    const searchParam = searchParams.get('search') || '';
+    const [searchTerm, setSearchTerm] = useState(searchParam);
+
+    // Logistics state
+    const [logisticsForm, setLogisticsForm] = useState<EventLogistics>({
+        staffAssigned: [],
+        vehicle: '',
+        equipment: []
+    });
+
+    useEffect(() => {
+        setSearchTerm(searchParam);
+    }, [searchParam]);
 
     useEffect(() => {
         fetchInquiries();
-    }, [filterStatus, page]); // Updated dependencies
+    }, [filterStatus, page, searchTerm]);
+
+    useEffect(() => {
+        if (selectedInquiry) {
+            setLogisticsForm({
+                staffAssigned: selectedInquiry.eventLogistics?.staffAssigned || [],
+                vehicle: selectedInquiry.eventLogistics?.vehicle || '',
+                equipment: selectedInquiry.eventLogistics?.equipment || []
+            });
+        }
+    }, [selectedInquiry]);
 
     const fetchInquiries = async () => {
-        setIsLoading(true); // Set loading true at the start of fetch
+        setIsLoading(true);
         try {
             const params = new URLSearchParams({
-                status: filterStatus === 'all' ? '' : filterStatus, // Send empty string for 'all'
+                status: filterStatus === 'all' ? '' : filterStatus,
                 page: String(page),
                 limit: '20',
+                search: searchTerm
             });
-            const response = await api.get(`/api/inquiries?${params.toString()}`); // Use api.get
+            const response = await api.get(`/api/inquiries?${params.toString()}`);
             const data = await response.json();
 
             if (data.success) {
                 setInquiries(data.data);
-                setTotalPages(data.pagination.totalPages); // Set total pages
+                setTotalPages(data.pagination.totalPages);
             } else {
-                console.error('Failed to fetch inquiries:', data.message);
                 setInquiries([]);
-                setTotalPages(1);
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            setInquiries([]);
-            setTotalPages(1);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const updateStatus = async (id: string, newStatus: string) => { // Renamed to match usage
+    const updateStatus = async (id: string, newStatus?: string, newNotes?: string) => {
         try {
-            const response = await api.patch(`/api/inquiries/${id}`, { status: newStatus }); // Use api.patch
-            const data = await response.json();
+            const body: any = {};
+            if (newStatus) body.status = newStatus;
+            if (newNotes !== undefined) body.notes = newNotes;
 
-            if (data.success) {
-                fetchInquiries(); // Re-fetch to update list and selected inquiry
-                if (selectedInquiry?._id === id) {
-                    setSelectedInquiry({ ...selectedInquiry, status: newStatus });
-                }
-            } else {
-                console.error('Failed to update status:', data.message);
+            await api.patch(`/api/inquiries/${id}`, body);
+            fetchInquiries();
+            if (selectedInquiry?._id === id) {
+                setSelectedInquiry(prev => prev ? ({ ...prev, ...(newStatus && { status: newStatus }), ...(newNotes && { notes: newNotes }) }) : null);
             }
+            if (newNotes !== undefined) alert('Note saved!');
         } catch (error) {
-            console.error('Update error:', error);
+            alert('Update failed');
         }
     };
 
-    const deleteInquiry = async (id: string) => { // New function
-        if (!confirm('정말 삭제하시겠습니까?')) return;
-
+    const saveLogistics = async () => {
+        if (!selectedInquiry) return;
         try {
-            const response = await api.delete(`/api/inquiries/${id}`); // Use api.delete
-            const data = await response.json();
-
-            if (data.success) {
-                fetchInquiries();
-                if (selectedInquiry?._id === id) {
-                    setSelectedInquiry(null); // Deselect if deleted
-                }
-            } else {
-                console.error('Failed to delete inquiry:', data.message);
-            }
+            await api.patch(`/api/inquiries/${selectedInquiry._id}`, {
+                eventLogistics: logisticsForm
+            });
+            alert('Logistics saved!');
+            fetchInquiries();
+            setSelectedInquiry(prev => prev ? ({ ...prev, eventLogistics: logisticsForm }) : null);
         } catch (error) {
-            console.error('Delete error:', error);
+            alert('Failed to save logistics');
         }
     };
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
+            year: 'numeric', month: 'short', day: 'numeric',
         });
-    };
-
-    const getStatusLabel = (status: string) => {
-        const labels: Record<string, string> = {
-            pending: '대기중',
-            contacted: '연락완료',
-            confirmed: '확정',
-            completed: '완료',
-        };
-        return labels[status] || status;
     };
 
     return (
         <div className="admin-inquiries">
             <div className="admin-page-header">
-                <h1 className="admin-page-title">예약/문의 관리</h1>
-                <p className="admin-page-subtitle">고객 문의 및 예약을 관리합니다</p>
+                <div>
+                    <h1 className="admin-page-title">Orders / Catering <span className="sub-text">예약 관리</span></h1>
+                    <p className="admin-page-subtitle">Manage catering orders and event logistics.</p>
+                </div>
+                <button className="admin-button" onClick={fetchInquiries}>↻ Refresh</button>
             </div>
 
-            {/* Filters */}
             <div className="inquiry-filters">
-                {['all', 'pending', 'contacted', 'confirmed', 'completed'].map((status) => (
-                    <button
-                        key={status}
-                        className={`filter-btn ${filter === status ? 'active' : ''}`}
-                        onClick={() => setFilter(status)}
-                    >
-                        {status === 'all' ? '전체' : getStatusLabel(status)}
-                    </button>
-                ))}
+                {[{ id: 'all', label: 'All' }, { id: 'pending', label: 'Pending' }, { id: 'confirmed', label: 'Confirmed' }, { id: 'completed', label: 'Completed' }]
+                    .map(s => (
+                        <button key={s.id} className={`filter-btn ${filterStatus === s.id ? 'active' : ''}`} onClick={() => { setFilterStatus(s.id); setPage(1); }}>
+                            {s.label}
+                        </button>
+                    ))}
             </div>
 
             <div className="inquiry-layout">
-                {/* List */}
                 <div className="admin-card inquiry-list">
-                    {isLoading ? (
-                        <div className="loading">로딩 중...</div>
-                    ) : inquiries.length === 0 ? (
-                        <div className="empty-state">문의가 없습니다.</div>
-                    ) : (
-                        <table className="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>고객명</th>
-                                    <th>행사유형</th>
-                                    <th>날짜</th>
-                                    <th>인원</th>
-                                    <th>상태</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {inquiries.map((inquiry) => (
-                                    <tr
-                                        key={inquiry._id}
-                                        className={selectedInquiry?._id === inquiry._id ? 'selected' : ''}
-                                        onClick={() => setSelectedInquiry(inquiry)}
-                                    >
-                                        <td>{inquiry.name}</td>
-                                        <td>{inquiry.eventType}</td>
-                                        <td>{formatDate(inquiry.eventDate)}</td>
-                                        <td>{inquiry.guestCount}명</td>
-                                        <td>
-                                            <span className={`status-badge ${inquiry.status}`}>
-                                                {getStatusLabel(inquiry.status)}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    {isLoading ? <div className="admin-loading">Loading...</div> : (
+                        <>
+                            <table className="admin-table">
+                                <thead>
+                                    <tr><th>Name</th><th>Date</th><th>Status</th></tr>
+                                </thead>
+                                <tbody>
+                                    {inquiries.map(inq => (
+                                        <tr key={inq._id} className={selectedInquiry?._id === inq._id ? 'selected' : ''} onClick={() => setSelectedInquiry(inq)}>
+                                            <td>{inq.name}</td>
+                                            <td>{formatDate(inq.eventDate)}</td>
+                                            <td><span className={`status-badge ${inq.status}`}>{inq.status}</span></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {totalPages > 1 && (
+                                <div className="pagination">
+                                    <button className="page-btn" disabled={page === 1} onClick={() => setPage(p => p - 1)}>&lt;</button>
+                                    <span style={{ margin: '0 10px' }}>{page} / {totalPages}</span>
+                                    <button className="page-btn" disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>&gt;</button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 
-                {/* Detail Panel */}
-                {selectedInquiry && (
+                {selectedInquiry ? (
                     <div className="admin-card inquiry-detail">
-                        <h3>문의 상세</h3>
+                        <div className="detail-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                            <h3>Order Details</h3>
+                            <button className="close-btn" onClick={() => setSelectedInquiry(null)}>✕</button>
+                        </div>
+
                         <div className="detail-grid">
-                            <div className="detail-item">
-                                <label>고객명</label>
-                                <p>{selectedInquiry.name}</p>
+                            <div className="detail-item"><label>Name</label><p>{selectedInquiry.name}</p></div>
+                            <div className="detail-item"><label>Email</label><p>{selectedInquiry.email}</p></div>
+                            <div className="detail-item"><label>Phone</label><p>{selectedInquiry.phone}</p></div>
+                            <div className="detail-item"><label>Date</label><p>{formatDate(selectedInquiry.eventDate)}</p></div>
+                            <div className="detail-item"><label>Guests</label><p>{selectedInquiry.guestCount}</p></div>
+                            <div className="detail-item"><label>Budget</label><p>{selectedInquiry.budget || 'N/A'}</p></div>
+                            <div className="detail-item full"><label>Message</label><p>{selectedInquiry.message}</p></div>
+
+                            {/* Internal Notes */}
+                            <div className="detail-item full" style={{ marginTop: '1rem', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+                                <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    Internal Notes
+                                    <button className="admin-button sm" onClick={() => {
+                                        const val = (document.getElementById(`note-${selectedInquiry._id}`) as HTMLTextAreaElement).value;
+                                        updateStatus(selectedInquiry._id, undefined, val);
+                                    }}>Save Note</button>
+                                </label>
+                                <textarea id={`note-${selectedInquiry._id}`} defaultValue={selectedInquiry.notes} className="admin-textarea" />
                             </div>
-                            <div className="detail-item">
-                                <label>이메일</label>
-                                <p>{selectedInquiry.email}</p>
-                            </div>
-                            <div className="detail-item">
-                                <label>연락처</label>
-                                <p>{selectedInquiry.phone}</p>
-                            </div>
-                            <div className="detail-item">
-                                <label>행사유형</label>
-                                <p>{selectedInquiry.eventType}</p>
-                            </div>
-                            <div className="detail-item">
-                                <label>행사일</label>
-                                <p>{formatDate(selectedInquiry.eventDate)}</p>
-                            </div>
-                            <div className="detail-item">
-                                <label>예상인원</label>
-                                <p>{selectedInquiry.guestCount}명</p>
-                            </div>
-                            <div className="detail-item">
-                                <label>예산</label>
-                                <p>{selectedInquiry.budget}</p>
-                            </div>
-                            <div className="detail-item full">
-                                <label>요청사항</label>
-                                <p>{selectedInquiry.message || '없음'}</p>
+
+                            {/* Logistics Section */}
+                            <div className="detail-item full" style={{ marginTop: '1rem', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+                                <label style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                    <strong>Event Logistics (배차/인력)</strong>
+                                    <button className="admin-button sm" onClick={saveLogistics}>Save Logistics</button>
+                                </label>
+                                <div className="logistics-form" style={{ display: 'grid', gap: '10px' }}>
+                                    <div>
+                                        <label style={{ fontSize: '0.9rem', color: '#666' }}>Staff Assigned (comma separated)</label>
+                                        <input
+                                            className="admin-input"
+                                            value={logisticsForm.staffAssigned.join(', ')}
+                                            onChange={e => setLogisticsForm({ ...logisticsForm, staffAssigned: e.target.value.split(',').map(s => s.trim()) })}
+                                            placeholder="John, Jane..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ fontSize: '0.9rem', color: '#666' }}>Vehicle</label>
+                                        <input
+                                            className="admin-input"
+                                            value={logisticsForm.vehicle}
+                                            onChange={e => setLogisticsForm({ ...logisticsForm, vehicle: e.target.value })}
+                                            placeholder="Truck 1..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ fontSize: '0.9rem', color: '#666' }}>Equipment (comma separated)</label>
+                                        <input
+                                            className="admin-input"
+                                            value={logisticsForm.equipment.join(', ')}
+                                            onChange={e => setLogisticsForm({ ...logisticsForm, equipment: e.target.value.split(',').map(s => s.trim()) })}
+                                            placeholder="Tables, Chairs..."
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="status-actions">
-                            <label>상태 변경</label>
+                        <div className="status-actions" style={{ marginTop: '2rem' }}>
+                            <label>Update Status</label>
                             <div className="status-buttons">
-                                {['pending', 'contacted', 'confirmed', 'completed'].map((status) => (
-                                    <button
-                                        key={status}
-                                        className={`status-btn ${status} ${selectedInquiry.status === status ? 'active' : ''}`}
-                                        onClick={() => updateStatus(selectedInquiry._id, status)}
-                                    >
-                                        {getStatusLabel(status)}
+                                {['pending', 'confirmed', 'completed'].map(s => (
+                                    <button key={s} className={`status-btn ${s} ${selectedInquiry.status === s ? 'active' : ''}`} onClick={() => updateStatus(selectedInquiry._id, s)}>
+                                        {s.toUpperCase()}
                                     </button>
                                 ))}
                             </div>
                         </div>
                     </div>
+                ) : (
+                    <div className="admin-card inquiry-detail empty-selection">Select an order</div>
                 )}
             </div>
         </div>

@@ -105,8 +105,13 @@ const AdminDocuments = () => {
     return (
         <div className="admin-documents">
             <div className="admin-page-header">
-                <h1 className="admin-page-title">문서/벡터DB 관리</h1>
-                <p className="admin-page-subtitle">AI 챗봇이 참고할 문서를 업로드하세요</p>
+                <div>
+                    <h1 className="admin-page-title">Documents / RAG <span className="sub-text">문서 관리</span></h1>
+                    <p className="admin-page-subtitle">Upload documents for AI context and knowledge base.</p>
+                </div>
+                <div className="header-status">
+                    <span className="status-badge active">{documents.length} Docs Created</span>
+                </div>
             </div>
 
             {/* Upload Zone */}
@@ -120,29 +125,34 @@ const AdminDocuments = () => {
                         <div className="progress-bar">
                             <div className="progress-fill" style={{ width: `${uploadProgress}%` }}></div>
                         </div>
-                        <p>업로드 중... {Math.round(uploadProgress)}%</p>
+                        <p>Uploading... {Math.round(uploadProgress)}%</p>
                     </div>
                 ) : (
                     <>
                         <div className="upload-icon">📤</div>
                         <p className="upload-text">
-                            {isDragActive ? '파일을 여기에 놓으세요' : '파일을 드래그하거나 클릭하여 업로드'}
+                            {isDragActive ? 'Drop file here' : 'Drag & drop or Click to upload'}
                         </p>
-                        <p className="upload-hint">지원 형식: Excel, PDF, Word, TXT (최대 10MB)</p>
+                        <p className="upload-hint">Supported formats: Excel, PDF, Word, TXT (Max 10MB)</p>
                     </>
                 )}
             </div>
 
             {/* Document List */}
             <div className="admin-card">
-                <h3>업로드된 문서 ({documents.length})</h3>
+                <div className="card-header">
+                    <h3>Uploaded Documents</h3>
+                </div>
 
                 {isLoading ? (
-                    <div className="loading">로딩 중...</div>
+                    <div className="admin-loading">
+                        <div className="loading-spinner"></div>
+                        <p>Loading...</p>
+                    </div>
                 ) : documents.length === 0 ? (
                     <div className="empty-state">
-                        <p>업로드된 문서가 없습니다.</p>
-                        <p className="hint">문서를 업로드하면 AI 챗봇이 내용을 학습합니다.</p>
+                        <p>No documents uploaded yet.</p>
+                        <p className="hint">Uploaded documents will be used by the AI chatbot for answers.</p>
                     </div>
                 ) : (
                     <div className="document-list">
@@ -150,15 +160,17 @@ const AdminDocuments = () => {
                             <div key={doc._id} className="document-item">
                                 <div className="doc-icon">{getFileIcon(doc.mimetype)}</div>
                                 <div className="doc-info">
-                                    <span className="doc-name">{doc.originalName}</span>
+                                    <span className="doc-name" title={doc.originalName}>{doc.originalName}</span>
                                     <span className="doc-meta">
-                                        {formatSize(doc.size)} · {doc.chunkCount}개 청크 · {formatDate(doc.uploadedAt)}
+                                        {formatSize(doc.size)} · {doc.chunkCount} chunks
+                                        <br />
+                                        {formatDate(doc.uploadedAt)}
                                     </span>
                                 </div>
                                 <button
                                     className="doc-delete"
                                     onClick={() => deleteDocument(doc._id)}
-                                    title="삭제"
+                                    title="Delete"
                                 >
                                     🗑️
                                 </button>
@@ -170,10 +182,12 @@ const AdminDocuments = () => {
 
             {/* Info Card */}
             <div className="info-card">
-                <h4>💡 벡터 데이터베이스란?</h4>
+                <h4>💡 Vector Database (RAG)</h4>
                 <p>
-                    업로드된 문서는 AI가 이해할 수 있는 벡터(숫자) 형태로 변환되어 저장됩니다.
-                    고객이 질문하면 AI가 관련 내용을 검색하여 정확한 답변을 제공합니다.
+                    Uploaded documents are converted into vectors (numbers) for AI understanding.
+                    When a customer asks a question, the AI retrieves relevant info from here to generate accurate answers.
+                    <br />
+                    <span className="text-muted text-xs">(문서는 AI가 학습하여 답변에 활용합니다)</span>
                 </p>
             </div>
         </div>

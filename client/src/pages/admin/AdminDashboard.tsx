@@ -109,7 +109,8 @@ const Dashboard: React.FC = () => {
                             📝
                         </div>
                         <div className="stat-content">
-                            <h3>전체 문의</h3>
+                            <h3>Total Inquiries</h3>
+                            <p className="stat-sub">전체 문의</p>
                             <p className="stat-value">{stats.totalInquiries}</p>
                         </div>
                     </div>
@@ -119,7 +120,8 @@ const Dashboard: React.FC = () => {
                             ⏳
                         </div>
                         <div className="stat-content">
-                            <h3>대기중 문의</h3>
+                            <h3>Pending</h3>
+                            <p className="stat-sub">대기중 문의</p>
                             <p className="stat-value">{stats.pendingInquiries}</p>
                         </div>
                     </div>
@@ -129,7 +131,8 @@ const Dashboard: React.FC = () => {
                             👥
                         </div>
                         <div className="stat-content">
-                            <h3>전체 고객</h3>
+                            <h3>Total Customers</h3>
+                            <p className="stat-sub">전체 고객</p>
                             <p className="stat-value">{stats.totalCustomers}</p>
                         </div>
                     </div>
@@ -139,7 +142,8 @@ const Dashboard: React.FC = () => {
                             📄
                         </div>
                         <div className="stat-content">
-                            <h3>문서</h3>
+                            <h3>Documents</h3>
+                            <p className="stat-sub">문서</p>
                             <p className="stat-value">{stats.totalDocuments}</p>
                         </div>
                     </div>
@@ -149,19 +153,19 @@ const Dashboard: React.FC = () => {
             {/* Recent Inquiries */}
             <div className="admin-card">
                 <div className="card-header">
-                    <h2>최근 문의</h2>
-                    <a href="/admin/inquiries" className="view-all-btn">전체보기 →</a>
+                    <h2>Recent Inquiries <span className="text-sm font-normal text-muted ml-2">최근 문의</span></h2>
+                    <a href="/admin/inquiries" className="view-all-btn">View All →</a>
                 </div>
                 <div className="inquiries-table type-table">
                     {recentInquiries.length > 0 ? (
                         <table className="admin-table">
                             <thead>
                                 <tr>
-                                    <th>이름</th>
-                                    <th>이메일</th>
-                                    <th>전화번호</th>
-                                    <th>상태</th>
-                                    <th>등록일</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>

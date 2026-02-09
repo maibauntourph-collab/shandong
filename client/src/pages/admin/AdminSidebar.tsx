@@ -3,12 +3,17 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './AdminSidebar.css';
 
 const menuItems = [
-    { path: '/admin/dashboard', label: '대시보드', icon: '📊' },
-    { path: '/admin/inquiries', label: '문의 관리', icon: '📝' },
-    { path: '/admin/customers', label: '고객 관리', icon: '👥' },
-    { path: '/admin/documents', label: '문서 관리', icon: '📄' },
-    { path: '/admin/notices', label: '공지사항', icon: '📢' },
-    { path: '/admin/settings', label: '설정', icon: '⚙️' },
+    { path: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/admin/menus', label: 'Menus', icon: '🍽️' },
+    { path: '/admin/inquiries', label: 'Orders', icon: '📋' },
+    { path: '/admin/customers', label: 'Customers', icon: '👥' },
+    { path: '/admin/calendar', label: 'Catering (Calendar)', icon: '📅' },
+    { path: '/admin/inventory', label: 'Inventory', icon: '📦' },
+    { path: '/admin/analytics', label: 'Analytics', icon: '📈' },
+    { path: '/admin/gallery', label: 'Gallery', icon: '🖼️' },
+    { path: '/admin/documents', label: 'Documents', icon: '📄' },
+    { path: '/admin/notices', label: 'Notices', icon: '📢' },
+    { path: '/admin/settings', label: 'Settings', icon: '⚙️' },
 ];
 
 const AdminSidebar: React.FC = () => {
@@ -56,7 +61,7 @@ const AdminSidebar: React.FC = () => {
                     </div>
                 </div>
                 <button className="logout-btn" onClick={handleLogout}>
-                    <span>🚪</span> 로그아웃
+                    <span>🚪</span> Logout
                 </button>
             </div>
         </aside>

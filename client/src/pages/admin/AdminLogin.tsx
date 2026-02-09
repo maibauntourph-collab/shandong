@@ -44,8 +44,7 @@ const Login: React.FC = () => {
         }
 
         if (dbConnected === false) {
-            setError('데이터베이스 연결 후 다시 시도해주세요.');
-            return;
+            // Attempt login anyway, but warn
         }
 
         setLoading(true);
@@ -76,6 +75,8 @@ const Login: React.FC = () => {
         } catch (err: any) {
             console.error('Login error:', err);
             setError(err.message || '로그인 정보가 올바르지 않습니다.');
+            // Re-check connection on failure
+            checkDatabaseConnection();
         } finally {
             setLoading(false);
         }
@@ -107,14 +108,7 @@ const Login: React.FC = () => {
 
                 {dbConnected === false && (
                     <div className="status-banner status-error">
-                        ⚠️ {error}
-                        <button
-                            onClick={checkDatabaseConnection}
-                            className="retry-button"
-                            title="Retry Connection"
-                        >
-                            ↻
-                        </button>
+                        ⚠️ {error || 'Connection Check Failed'}
                     </div>
                 )}
 
@@ -129,7 +123,7 @@ const Login: React.FC = () => {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Enter your admin ID"
-                            disabled={loading || dbConnected === false}
+                            disabled={loading}
                             autoComplete="username"
                         />
                     </div>
@@ -144,14 +138,14 @@ const Login: React.FC = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Enter your password"
-                                disabled={loading || dbConnected === false}
-                                autocomplete="current-password"
+                                disabled={loading}
+                                autoComplete="current-password"
                             />
                             <button
                                 type="button"
                                 className="toggle-password"
                                 onClick={() => setShowPassword(!showPassword)}
-                                disabled={loading || dbConnected === false}
+                                disabled={loading}
                             >
                                 {showPassword ? 'Hide' : 'Show'}
                             </button>
@@ -169,7 +163,7 @@ const Login: React.FC = () => {
                     <button
                         type="submit"
                         className="login-button"
-                        disabled={loading || dbConnected === false}
+                        disabled={loading}
                     >
                         {loading ? (
                             <>

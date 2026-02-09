@@ -30,12 +30,31 @@
   budget: String,          // 예산
   message: String,         // 상세 내용
   status: String,          // "new" | "contacted" | "confirmed" | "completed" | "cancelled"
+  notes: String,           // 관리자 내부 메모
+  eventLogistics: {        // 행사 배차/인력 관리
+    staffAssigned: [String], // 배정된 직원 목록
+    vehicle: String,       // 배차 정보
+    equipment: [String]    // 필요 장비 목록
+  },
   createdAt: Date,
   updatedAt: Date
 }
 ```
 
-### 3. chatSessions (AI 챗봇 세션)
+### 3. inventory (재고 관리)
+```javascript
+{
+  _id: ObjectId,
+  name: String,            // 품목명
+  quantity: Number,        // 수량
+  unit: String,            // 단위 (kg, ea, box 등)
+  threshold: Number,       // 최소 수량 알림 기준
+  category: String,        // 분류 (general, food, equipment 등)
+  lastUpdated: Date        // 마지막 수정일
+}
+```
+
+### 4. chatSessions (AI 챗봇 세션)
 ```javascript
 {
   _id: ObjectId,
@@ -50,7 +69,7 @@
 }
 ```
 
-### 4. documents (벡터DB 문서)
+### 5. documents (벡터DB 문서)
 ```javascript
 {
   _id: ObjectId,
@@ -63,7 +82,7 @@
 }
 ```
 
-### 5. notices (공지사항)
+### 6. notices (공지사항)
 ```javascript
 {
   _id: ObjectId,

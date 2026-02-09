@@ -8,6 +8,10 @@ import inquiriesRouter from './routes/inquiries.js';
 import documentsRouter from './routes/documents.js';
 import adminRouter from './routes/admin.js';
 import exchangeRatesRouter from './routes/exchange-rates.js';
+import menusRouter from './routes/menus.js';
+import galleryRouter from './routes/gallery.js';
+import inventoryRouter from './routes/inventory.js';
+import analyticsRouter from './routes/analytics.js';
 
 const app = express();
 
@@ -28,6 +32,10 @@ app.use('/api/inquiries', inquiriesRouter);
 app.use('/api/documents', documentsRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/exchange-rates', exchangeRatesRouter);
+app.use('/api/menus', menusRouter);
+app.use('/api/gallery', galleryRouter);
+app.use('/api/inventory', inventoryRouter);
+app.use('/api/analytics', analyticsRouter);
 
 // Health check - UPDATED
 app.get('/api/health', (req, res) => {

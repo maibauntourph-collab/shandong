@@ -1,37 +1,47 @@
+@import './AdminLayout.css';
+
 .admin-documents {
-    max-width: 900px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 /* Upload Zone */
 .upload-zone {
-    background: var(--white);
-    border: 2px dashed var(--cream-dark);
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px dashed rgba(212, 175, 55, 0.3);
+    /* Gold tint */
     border-radius: var(--radius-xl);
-    padding: var(--space-10);
+    padding: var(--space-8);
     text-align: center;
     cursor: pointer;
     transition: all var(--transition-base);
     margin-bottom: var(--space-6);
+    backdrop-filter: blur(4px);
 }
 
 .upload-zone:hover,
 .upload-zone.active {
     border-color: var(--gold);
-    background: linear-gradient(135deg, rgba(255, 240, 235, 0.5), rgba(230, 215, 255, 0.5));
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
 }
 
 .upload-zone.uploading {
     cursor: not-allowed;
+    border-style: solid;
 }
 
 .upload-icon {
     font-size: 3rem;
     margin-bottom: var(--space-3);
+    color: var(--gold);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .upload-text {
     font-size: var(--text-lg);
-    font-weight: 500;
+    font-family: var(--font-display);
+    color: var(--dark);
     margin-bottom: var(--space-2);
 }
 
@@ -49,7 +59,7 @@
 
 .progress-bar {
     height: 8px;
-    background: var(--cream-dark);
+    background: rgba(0, 0, 0, 0.05);
     border-radius: var(--radius-full);
     overflow: hidden;
     margin-bottom: var(--space-2);
@@ -62,33 +72,38 @@
 }
 
 /* Document List */
-.admin-card h3 {
-    font-size: var(--text-lg);
-    margin-bottom: var(--space-4);
-}
-
 .document-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-4);
 }
 
 .document-item {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    background: var(--cream);
+    padding: var(--space-4);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--radius-lg);
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
 }
 
 .document-item:hover {
-    background: var(--lavender);
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
 .doc-icon {
-    font-size: 1.5rem;
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-md);
 }
 
 .doc-info {
@@ -96,11 +111,17 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
+    min-width: 0;
+    /* For text truncation */
 }
 
 .doc-name {
-    font-weight: 500;
+    font-weight: 600;
     font-size: var(--text-sm);
+    color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .doc-meta {
@@ -110,31 +131,50 @@
 
 .doc-delete {
     padding: var(--space-2);
+    border: none;
+    background: transparent;
     border-radius: var(--radius-md);
+    cursor: pointer;
     transition: all var(--transition-fast);
+    opacity: 0.5;
 }
 
 .doc-delete:hover {
     background: #fee2e2;
+    opacity: 1;
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--space-8);
+    color: var(--text-secondary);
 }
 
 .empty-state .hint {
     font-size: var(--text-sm);
-    color: var(--text-secondary);
     margin-top: var(--space-2);
+    color: var(--text-muted);
 }
 
 /* Info Card */
 .info-card {
-    background: linear-gradient(135deg, var(--lavender), var(--cream));
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--radius-xl);
-    padding: var(--space-5);
-    margin-top: var(--space-6);
+    padding: var(--space-6);
+    margin-top: var(--space-8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 .info-card h4 {
+    font-family: var(--font-display);
     font-size: var(--text-base);
+    color: var(--dark);
     margin-bottom: var(--space-2);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
 }
 
 .info-card p {

@@ -1,36 +1,46 @@
+@import './AdminLayout.css';
+
 .admin-customers {
     max-width: 1200px;
+    margin: 0 auto;
 }
 
 .search-form {
     display: flex;
     gap: var(--space-3);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
 }
 
 .search-input {
     flex: 1;
     max-width: 400px;
     padding: var(--space-3) var(--space-4);
-    border: 1px solid var(--cream-dark);
-    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+    border-radius: var(--radius-full);
     font-size: var(--text-base);
+    transition: all var(--transition-fast);
 }
 
 .search-input:focus {
     outline: none;
     border-color: var(--gold);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .customer-name {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    font-weight: 600;
+    color: var(--dark);
 }
 
 .avatar {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-full);
     background: var(--gradient-gold);
     color: var(--white);
@@ -39,11 +49,17 @@
     justify-content: center;
     font-weight: 600;
     font-size: var(--text-sm);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
 }
 
 .inquiry-count {
     font-weight: 600;
     color: var(--gold-dark);
+    background: rgba(212, 175, 55, 0.1);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
 }
 
 .pagination {
@@ -53,28 +69,34 @@
     gap: var(--space-4);
     margin-top: var(--space-6);
     padding-top: var(--space-4);
-    border-top: 1px solid var(--cream-dark);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .page-btn {
     padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
     font-size: var(--text-sm);
     color: var(--text-secondary);
     transition: all var(--transition-fast);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .page-btn:hover:not(:disabled) {
-    background: var(--cream);
-    color: var(--dark);
+    border-color: var(--gold);
+    color: var(--gold-dark);
 }
 
 .page-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background: transparent;
+    border-color: transparent;
 }
 
 .page-info {
     font-size: var(--text-sm);
     color: var(--text-secondary);
+    font-feature-settings: "tnum";
 }

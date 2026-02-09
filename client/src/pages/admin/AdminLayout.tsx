@@ -15,10 +15,10 @@ const AdminLayout: React.FC = () => {
             <AdminSidebar />
             <main className="main-content">
                 <header className="top-bar">
-                    <h1>관리자 대시보드</h1>
+                    <h1>Admin Dashboard</h1>
                     <div className="top-bar-actions">
                         <button className="refresh-btn" onClick={handleRefresh}>
-                            🔄 새로고침
+                            🔄 Refresh
                         </button>
                     </div>
                 </header>
