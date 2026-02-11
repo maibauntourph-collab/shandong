@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getDB } from '../db.js';
 import { ObjectId } from 'mongodb';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, requireRole } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -171,8 +171,8 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
-// Delete inquiry
-router.delete('/:id', async (req, res) => {
+// Delete inquiry (owner only)
+router.delete('/:id', requireRole('owner') as any, async (req, res) => {
     try {
         const { id } = req.params;
         const db = getDB();

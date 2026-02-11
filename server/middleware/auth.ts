@@ -24,7 +24,27 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         if (err) {
             return res.status(403).json({ success: false, error: '유효하지 않은 토큰입니다.' });
         }
+        // Normalize legacy 'admin' role to 'owner'
+        if (user.role === 'admin') user.role = 'owner';
         (req as AuthRequest).user = user;
         next();
     });
 };
+
+/**
+ * Middleware: restrict route to specific roles.
+ * Usage: router.delete('/:id', requireRole('owner'), handler)
+ */
+export const requireRole = (...roles: string[]) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const user = (req as AuthRequest).user;
+        if (!user || !roles.includes(user.role)) {
+            return res.status(403).json({
+                success: false,
+                error: '권한이 부족합니다. (Insufficient permissions)',
+            });
+        }
+        next();
+    };
+};
+

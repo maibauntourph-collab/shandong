@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import { getDB } from '../db.js';
 import { ObjectId } from 'mongodb';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, requireRole } from '../middleware/auth.js';
 
 const router = Router();
 
 router.use(authenticateToken as any);
+router.use(requireRole('owner', 'manager') as any);
 
 // Get all inventory items
 router.get('/', async (req, res) => {
@@ -85,8 +86,8 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete item
-router.delete('/:id', async (req, res) => {
+// Delete item (owner only)
+router.delete('/:id', requireRole('owner') as any, async (req, res) => {
     try {
         const { id } = req.params;
         const db = getDB();
