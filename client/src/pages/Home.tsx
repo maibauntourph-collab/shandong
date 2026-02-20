@@ -1,368 +1,190 @@
-import { useLocation, Link } from 'wouter';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { getServiceMenuData } from '../data/menuData';
 import './Home.css';
 
 const Home = () => {
-    const { t, language } = useLanguage();
-    const [, setLocation] = useLocation();
-    const navigate = (path: string) => setLocation(path);
-    const restaurantMenu = getServiceMenuData(language).filter(item =>
-        !['wedding', 'corporate', 'private', 'vip'].includes(item.category)
-    );
+    const { t } = useLanguage();
 
-    const services = [
-        {
-            icon: '🥢',
-            title: t('services.wedding'),
-            description: t('services.subtitle'),
-            image: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=600&q=80',
-            link: '/quote'
-        },
-        {
-            icon: '🏢',
-            title: t('services.corporate'),
-            description: t('services.subtitle'),
-            image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=600&q=80',
-            link: '/quote'
-        },
-        {
-            icon: '🎊',
-            title: t('services.private'),
-            description: t('services.subtitle'),
-            image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=600&q=80',
-            link: '/quote'
-        },
-        {
-            icon: '✨',
-            title: t('services.vip'),
-            description: t('services.subtitle'),
-            image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80',
-            link: '/quote'
-        },
+    const dishes = [
+        { key: 'dish1', image: 'https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=1200&q=80' }, /* Jjamppong */
+        { key: 'dish2', image: 'https://images.unsplash.com/photo-1590671886400-8f8088b90703?auto=format&fit=crop&w=1200&q=80' }, /* Jajangmyeon */
+        { key: 'dish3', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80' }, /* Tangsuyuk */
+        { key: 'dish4', image: 'https://images.unsplash.com/photo-1623341214825-9f4f963727da?auto=format&fit=crop&w=1200&q=80' }, /* Shandong Chicken */
     ];
 
-    const testimonials = [
-        {
-            quote: '산동 레스토랑의 출장 연회 서비스 덕분에 결혼식이 더욱 특별했습니다.',
-            author: '김서연',
-            role: '웨딩 고객',
-        },
-        {
-            quote: '회사 송년회 케이터링을 맡겼는데, 직원들 모두 감탄했습니다.',
-            author: '박준혁',
-            role: '기업 고객',
-        },
-        {
-            quote: '부모님 회갑연을 최고로 만들어주셔서 감사합니다.',
-            author: '이은지',
-            role: '가족 행사 고객',
-        },
+    const cateringPackages = [
+        { key: 'intimate', pax: '4–6 guests' },
+        { key: 'celebration', pax: '10–12 guests', popular: true },
+        { key: 'corporate', pax: '15–25 pax', badge: true },
     ];
 
     return (
-        <div className="home">
-            {/* Hero Section */}
-            <section className="hero">
-                <div className="hero-bg"></div>
-                <div className="hero-content container">
-                    <div className="hero-text animate-fade-in-up">
-                        <span className="hero-badge">{t('hero.badge')}</span>
-                        <h1 className="hero-title">
-                            {t('hero.title1')}<br />
-                            <span className="text-gold">{t('hero.title2')}</span>
-                        </h1>
-                        <p className="hero-description">
-                            {t('hero.description')}
-                        </p>
-                        <p className="hero-tagline" style={{ fontSize: '1.1rem', fontStyle: 'italic', opacity: 0.9, marginTop: '0.5rem' }}>
-                            "{t('tagline.main')}"
-                        </p>
-                        <div className="hero-buttons">
-                            <Link href="/quote" className="btn btn-primary btn-lg">
-                                {t('hero.cta1')}
-                            </Link>
-                            <Link href="/services" className="btn btn-outline btn-lg">
-                                {t('hero.cta2')}
-                            </Link>
+        <div className="home-page">
+            {/* SECTION 1 — HERO */}
+            <section className="hero-section">
+                <div className="hero-overlay"></div>
+                <div className="container hero-container">
+                    <div className="hero-content animate-fade-in-up">
+                        <h1 className="hero-headline">{t('hero.headline')}</h1>
+                        <p className="hero-subheadline">{t('hero.subheadline')}</p>
+                        <div className="hero-actions">
+                            <Link to="/contact" className="btn btn-primary">{t('hero.cta.reserve')}</Link>
+                            <Link to="/quote" className="btn btn-outline">{t('hero.cta.catering')}</Link>
                         </div>
+                        <p className="hero-trust">{t('hero.trust')}</p>
                     </div>
-                    <div className="hero-visual animate-fade-in">
-                        <div className="hero-image-wrapper">
-                            <img
-                                src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80"
-                                alt="정통 중식 코스요리"
-                                className="hero-image"
-                            />
-                            <div className="hero-image-overlay"></div>
-                        </div>
-                        <div className="hero-stats glass">
-                            <div className="stat">
-                                <span className="stat-number">1,500+</span>
-                                <span className="stat-label">{t('hero.stats.events')}</span>
-                            </div>
-                            <div className="stat-divider"></div>
-                            <div className="stat">
-                                <span className="stat-number">98%</span>
-                                <span className="stat-label">{t('hero.stats.satisfaction')}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="hero-scroll">
-                    <span>스크롤</span>
-                    <div className="scroll-indicator"></div>
                 </div>
             </section>
 
-            {/* Services Section (Package Menu) */}
-            <section className="services-section section">
+            {/* SECTION 2 — BRAND POSITIONING STRIP */}
+            <section className="positioning-strip diamond-overlay">
+                <div className="container strip-grid">
+                    <div className="strip-item">
+                        <span className="strip-icon">🏮</span>
+                        <h3>{t('pos.heritage.title')}</h3>
+                        <p>{t('pos.heritage.desc')}</p>
+                    </div>
+                    <div className="strip-item">
+                        <span className="strip-icon">🥢</span>
+                        <h3>{t('pos.dinein.title')}</h3>
+                        <p>{t('pos.dinein.desc')}</p>
+                    </div>
+                    <div className="strip-item">
+                        <span className="strip-icon">🚚</span>
+                        <h3>{t('pos.catering.title')}</h3>
+                        <p>{t('pos.catering.desc')}</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* SECTION 3 — SIGNATURE DISHES */}
+            <section className="signature-section section">
                 <div className="container">
-                    <h2 className="section-title">{t('services.title')}</h2>
-                    <p className="section-subtitle">
-                        {t('services.description')}
-                    </p>
-                    <div className="services-grid">
-                        {services.map((service, index) => (
-                            <div
-                                key={index}
-                                className="service-card card-glass"
-                                style={{ animationDelay: `${index * 0.1}s` }}
-                                onClick={() => navigate('/services')}
-                            >
-                                <div className="service-image-wrapper">
-                                    <img src={service.image} alt={service.title} className="service-image" />
+                    <div className="section-header text-center mb-16">
+                        <h2 className="section-title mb-4">{t('signature.title')}</h2>
+                        <p className="section-intro">{t('signature.intro')}</p>
+                    </div>
+                    <div className="dish-grid">
+                        {dishes.map((dish) => (
+                            <div key={dish.key} className="dish-card">
+                                <div className="dish-image-wrapper">
+                                    <img src={dish.image} alt={t(`signature.${dish.key}.name`)} />
                                 </div>
-                                <div className="service-content">
-                                    <span className="service-icon">{service.icon}</span>
-                                    <h3 className="service-title">{service.title}</h3>
-                                    <p className="service-description">{service.description}</p>
-                                    <div className="service-link">
-                                        {t('common.learnMore')} →
-                                    </div>
+                                <div className="dish-content">
+                                    <h3>{t(`signature.${dish.key}.name`)}</h3>
+                                    <p>{t(`signature.${dish.key}.desc`)}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
-                </div>
-            </section>
-
-            {/* Restaurant Menu Section */}
-            <section className="restaurant-menu-section section bg-light">
-                <div className="container">
-                    <h2 className="section-title">🍜 {t('visit.title')}</h2>
-                    <p className="section-subtitle">
-                        {t('visit.description')}
-                    </p>
-                    <div className="restaurant-menu-grid">
-                        {restaurantMenu.map((menu, index) => (
-                            <div key={menu.id} className="menu-category-card card" style={{ animationDelay: `${index * 0.1}s` }}>
-                                <div className="menu-category-image">
-                                    <img src={menu.image} alt={menu.title} />
-                                    <span className="menu-category-emoji glass">{menu.emoji}</span>
-                                </div>
-                                <div className="menu-category-content">
-                                    <h3>{menu.title}</h3>
-                                    <p className="menu-category-desc">{menu.description}</p>
-                                    <div className="menu-category-features">
-                                        {menu.features.slice(0, 4).map((feature, i) => (
-                                            <span key={i} className="feature-tag">✓ {feature}</span>
-                                        ))}
-                                    </div>
-                                    <div className="menu-category-footer">
-                                        <span className="price-tag">{menu.price}</span>
-                                        <button className="btn btn-outline btn-sm" onClick={() => navigate('/services')}>
-                                            {t('hero.cta1')}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                    <div className="text-center mt-12">
+                        <Link to="/services" className="btn btn-gold-outline">{t('signature.more')}</Link>
                     </div>
                 </div>
             </section>
 
-            {/* About Section */}
-            <section className="about-section section">
+            {/* SECTION 4 — CATERING AUTHORITY */}
+            <section className="catering-authority-section section bg-matte">
                 <div className="container">
-                    <div className="about-grid">
-                        <div className="about-content">
-                            <span className="about-badge">{t('about.badge')}</span>
-                            <h2 className="about-title">
-                                {t('about.title')}
-                            </h2>
-                            <p className="about-text">
-                                {t('about.description')}
-                            </p>
-                            <ul className="about-features">
-                                <li>
-                                    <span className="feature-check">✓</span>
-                                    {t('about.feature1')}
-                                </li>
-                                <li>
-                                    <span className="feature-check">✓</span>
-                                    {t('about.feature2')}
-                                </li>
-                                <li>
-                                    <span className="feature-check">✓</span>
-                                    {t('about.feature3')}
-                                </li>
-                                <li>
-                                    <span className="feature-check">✓</span>
-                                    {t('about.feature4')}
-                                </li>
-                            </ul>
-                            <Link href="/quote" className="btn btn-primary">
-                                {t('services.inquire')}
-                            </Link>
-                        </div>
-                        <div className="about-visual">
-                            <div className="about-image-wrapper">
-                                <img
-                                    src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=700&q=80"
-                                    alt="산동 레스토랑 셰프"
-                                    className="about-image"
-                                />
-                            </div>
-                            <div className="about-accent"></div>
-                        </div>
+                    <div className="catering-header mb-16">
+                        <h2 className="section-title mb-6">{t('catering.authority.title')}</h2>
+                        <p className="section-desc max-w-2xl">{t('catering.authority.desc')}</p>
                     </div>
-                </div>
-            </section>
-
-            {/* Visit Us - Restaurant Section */}
-            <section className="visit-section section">
-                <div className="container">
-                    <h2 className="section-title">🍜 {t('visit.title')}</h2>
-                    <p className="section-subtitle">
-                        {t('visit.description')}
-                    </p>
-
-                    <div className="visit-grid">
-                        {/* Restaurant Images */}
-                        <div className="visit-gallery">
-                            <div className="gallery-main">
-                                <img
-                                    src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
-                                    alt="Restaurant Interior"
-                                />
-                            </div>
-                            <div className="gallery-grid">
-                                <img
-                                    src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=400&q=80"
-                                    alt="Chinese Dish"
-                                />
-                                <img
-                                    src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80"
-                                    alt="Ambiance"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Restaurant Info */}
-                        <div className="visit-info">
-                            <div className="info-card glass">
-                                <h3>{t('visit.hours')}</h3>
-                                <div className="info-list">
-                                    <div className="info-row">
-                                        <span>{t('visit.weekday')}</span>
-                                        <strong>11:00 - 22:00</strong>
-                                    </div>
-                                    <div className="info-row">
-                                        <span>{t('visit.weekend')}</span>
-                                        <strong>11:00 - 21:30</strong>
-                                    </div>
-                                    <div className="info-row highlight">
-                                        <span>{t('visit.breaktime')}</span>
-                                        <strong>15:00 - 17:00</strong>
-                                    </div>
-                                    <div className="info-row">
-                                        <span>{t('visit.lastorder')}</span>
-                                        <strong>{t('visit.lastorder')} 30min prior</strong>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="info-card glass">
-                                <h3>📍 {t('visit.location')}</h3>
-                                <p className="address">328 10th Street, #101, Oakland, CA 94607</p>
-                                <p className="transport">🚇 {t('visit.transport')}</p>
-                                <p className="parking">🅿️ {t('visit.parking')}</p>
-                            </div>
-
-                            <div className="info-card glass">
-                                <h3>📞 {t('visit.reservation')}</h3>
-                                <a href="tel:510-839-2299" className="phone-number">(510) 839-2299</a>
-                                <p className="reservation-note">{t('visit.group')}</p>
-                            </div>
-
-                            <div className="info-card glass menu-preview">
-                                <h3>🥢 {t('visit.menu_preview')}</h3>
-                                <div className="menu-list">
-                                    <div className="menu-item">
-                                        <span className="menu-name">Shan Dong Chicken</span>
-                                        <span className="menu-price">$16.95</span>
-                                    </div>
-                                    <div className="menu-item">
-                                        <span className="menu-name">Sesame Noodles</span>
-                                        <span className="menu-price">$14.95</span>
-                                    </div>
-                                </div>
-                                <Link href="/services" className="view-all-menu">
-                                    {t('common.learnMore')} →
+                    <div className="package-grid">
+                        {cateringPackages.map((pkg) => (
+                            <div key={pkg.key} className={`package-card ${pkg.popular ? 'popular' : ''}`}>
+                                {pkg.badge && <span className="package-badge">{t('catering.corporate.badge')}</span>}
+                                <h3>{t(`catering.package.${pkg.key}.title`)}</h3>
+                                <p className="pax-count">{pkg.pax}</p>
+                                <p className="package-desc">{t(`catering.package.${pkg.key}.desc`)}</p>
+                                <Link to="/quote" className="btn btn-primary w-full mt-auto">
+                                    {t('catering.proposal')}
                                 </Link>
                             </div>
+                        ))}
+                    </div>
+                    <p className="catering-trust-line text-center mt-12">{t('catering.trust')}</p>
+                </div>
+            </section>
+
+            {/* SECTION 5 — RESTAURANT EXPERIENCE */}
+            <section className="restaurant-experience-section section">
+                <div className="container">
+                    <div className="experience-grid">
+                        <div className="experience-content">
+                            <h2 className="section-title text-left mb-6">{t('visit.headline')}</h2>
+                            <p className="experience-copy mb-8">{t('visit.copy')}</p>
+                            <ul className="highlight-list mb-12">
+                                <li>{t('visit.highlight1')}</li>
+                                <li>{t('visit.highlight2')}</li>
+                                <li>{t('visit.highlight3')}</li>
+                                <li>{t('visit.highlight4')}</li>
+                            </ul>
+                            <div className="experience-actions">
+                                <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="btn btn-primary">{t('visit.directions')}</a>
+                                <Link to="/contact" className="btn btn-outline">{t('visit.reserve')}</Link>
+                            </div>
+                        </div>
+                        <div className="experience-image">
+                            <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=1200&q=80" alt="Shandong Restaurant Interior" className="rounded-depth" />
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Testimonials Section */}
-            <section className="testimonials-section section">
-                <div className="container">
-                    <h2 className="section-title">{t('testimonials.title')}</h2>
-                    <p className="section-subtitle">
-                        {t('testimonials.subtitle')}
-                    </p>
-                    <div className="testimonials-grid">
-                        {testimonials.map((testimonial, index) => (
-                            <div key={index} className="testimonial-card card">
-                                <div className="testimonial-quote">
-                                    <span className="quote-mark">"</span>
-                                    <p>{testimonial.quote}</p>
-                                </div>
-                                <div className="testimonial-author">
-                                    <div className="author-avatar">
-                                        {testimonial.author.charAt(0)}
-                                    </div>
-                                    <div className="author-info">
-                                        <span className="author-name">{testimonial.author}</span>
-                                        <span className="author-role">{testimonial.role}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+            {/* --- EXPERIENCE TAGLINE STRIP --- */}
+            <section className="experience-tagline-section section diamond-overlay">
+                <div className="container text-center">
+                    <h2 className="tagline-text animate-fade-in-up">
+                        "FOOD is not just eating energy.<br />It's an <span className="text-gold">EXPERIENCE</span>."
+                    </h2>
+                </div>
+            </section>
+
+            {/* SECTION 6 — HERITAGE STORY */}
+            <section className="heritage-story-section section bg-primary-dark">
+                <div className="container text-center">
+                    <div className="story-content max-w-3xl mx-auto">
+                        <h2 className="section-title mb-8">{t('heritage.title')}</h2>
+                        <div className="story-text">
+                            {t('heritage.copy').split('. ').map((sentence, i) => (
+                                <p key={i} className="mb-4">{sentence}{sentence.endsWith('.') ? '' : '.'}</p>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="cta-section section">
+            {/* SECTION 7 — SOCIAL PROOF */}
+            <section className="social-proof-section section">
                 <div className="container">
-                    <div className="cta-content glass">
-                        <h2 className="cta-title">
-                            {t('cta.title')}
-                        </h2>
-                        <p className="cta-text">
-                            {t('cta.description')}
-                        </p>
-                        <div className="cta-buttons">
-                            <Link href="/quote" className="btn btn-primary btn-lg">
-                                {t('cta.button')}
-                            </Link>
-                            <a href="tel:510-839-2299" className="btn btn-secondary btn-lg">
-                                📞 {t('contact.phone')}
-                            </a>
+                    <h2 className="section-title text-center mb-16">{t('social.title')}</h2>
+                    <div className="testimonial-grid">
+                        <div className="testimonial-card">
+                            <p className="review-text">"{t('social.review1.text')}"</p>
+                            <p className="review-author">— {t('social.review1.author')}</p>
+                        </div>
+                        <div className="testimonial-card">
+                            <p className="review-text">"{t('social.review2.text')}"</p>
+                            <p className="review-author">— {t('social.review2.author')}</p>
+                        </div>
+                    </div>
+                    <div className="google-rating mt-12 text-center">
+                        <span className="rating-stars">★★★★★</span>
+                        <span className="rating-text">Google Rated 4.8</span>
+                    </div>
+                </div>
+            </section>
+
+            {/* SECTION 8 — FINAL CTA */}
+            <section className="final-cta-section section">
+                <div className="container">
+                    <div className="cta-box glass text-center">
+                        <h2 className="section-title mb-6">{t('final.cta.headline')}</h2>
+                        <p className="final-copy mb-12">{t('final.cta.copy')}</p>
+                        <div className="cta-actions">
+                            <Link to="/contact" className="btn btn-primary">{t('hero.cta.reserve')}</Link>
+                            <Link to="/quote" className="btn btn-outline">{t('hero.cta.catering')}</Link>
                         </div>
                     </div>
                 </div>

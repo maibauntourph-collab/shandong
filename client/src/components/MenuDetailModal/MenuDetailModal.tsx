@@ -3,6 +3,7 @@ import { ServiceMenu } from '../../data/menuData';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
+import { useLanguage } from '../../contexts/LanguageContext';
 import './MenuDetailModal.css';
 
 interface MenuDetailModalProps {
@@ -12,6 +13,7 @@ interface MenuDetailModalProps {
 }
 
 const MenuDetailModal = ({ menu, isOpen, onClose }: MenuDetailModalProps) => {
+    const { t } = useLanguage();
     const [lightboxIndex, setLightboxIndex] = useState(-1);
 
     useEffect(() => {
@@ -37,17 +39,6 @@ const MenuDetailModal = ({ menu, isOpen, onClose }: MenuDetailModalProps) => {
 
     if (!isOpen || !menu) return null;
 
-    // Flatten all items to create slides for the lightbox
-    // We only include items that have images, or we can include all trying to use fallback?
-    // User wants "click to enlarge". If we make a slideshow, we need all items that have images.
-    // Let's create a mapping from "visual index" to "slide".
-
-    // Actually, simple approach: Create slides from ALL items in the current menu.
-    // If an item has no image, we might skip it in the lightbox or show a placeholder?
-    // Let's only include items with images for the lightbox navigation.
-    // But then the index mapping is tricky when clicking a specific item.
-    // Better: Helper function to get the slide index for a given item.
-
     const allItemsWithImages = menu.courses.flatMap(c => c.items.filter(i => i.image));
     const slides = allItemsWithImages.map(item => ({
         src: item.image!,
@@ -65,65 +56,58 @@ const MenuDetailModal = ({ menu, isOpen, onClose }: MenuDetailModalProps) => {
 
     return (
         <>
-            <div className="menu-modal-overlay" onClick={onClose}>
-                <div className="menu-modal" onClick={(e) => e.stopPropagation()}>
-                    <button className="modal-close" onClick={onClose} aria-label="닫기">
+            <div className="menu-modal-overlay-premium" onClick={onClose}>
+                <div className="menu-modal-premium glass" onClick={(e) => e.stopPropagation()}>
+                    <button className="modal-close-premium" onClick={onClose} aria-label="Close">
                         ✕
                     </button>
 
-                    <div className="modal-header">
-                        <div className="modal-header-image" style={{ backgroundImage: `url(${menu.image})` }}>
-                            <div className="modal-header-overlay">
-                                <span className="menu-emoji">{menu.emoji}</span>
-                                <h2 className="modal-title">{menu.title}</h2>
-                                <p className="modal-subtitle">{menu.subtitle}</p>
+                    <div className="modal-header-premium">
+                        <div className="modal-header-image-premium" style={{ backgroundImage: `url(${menu.image})` }}>
+                            <div className="modal-header-overlay-premium">
+                                <span className="menu-emoji-premium">{menu.emoji}</span>
+                                <h2 className="modal-title-premium">{menu.title}</h2>
+                                <p className="modal-subtitle-premium">{menu.subtitle}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="modal-body">
-                        <div className="modal-info">
-                            <p className="modal-description">{menu.description}</p>
-                            <div className="modal-price">
-                                <span className="price-label">가격</span>
-                                <span className="price-value">{menu.price}</span>
-                            </div>
-                            <div className="modal-features">
-                                {menu.features.map((feature, idx) => (
-                                    <span key={idx} className="feature-badge">✓ {feature}</span>
-                                ))}
+                    <div className="modal-body-premium">
+                        <div className="modal-intro-premium">
+                            <p className="modal-description-premium">{menu.description}</p>
+                            <div className="modal-meta-row">
+                                <div className="modal-price-premium">
+                                    <span className="price-value-premium">{menu.price}</span>
+                                </div>
+                                <div className="modal-badges-premium">
+                                    {menu.features.map((feature, idx) => (
+                                        <span key={idx} className="feature-badge-premium">• {feature}</span>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
-                        <div className="modal-courses">
-                            <h3 className="courses-title">🍽️ 코스 구성</h3>
-                            <div className="courses-list">
+                        <div className="modal-courses-premium">
+                            <h3 className="courses-title-premium">Menu Details</h3>
+                            <div className="courses-grid-modal">
                                 {menu.courses.map((course, idx) => (
-                                    <div key={idx} className="course-item">
-                                        <h4 className="course-name">{course.courseName}</h4>
-                                        <ul className="course-menu-list">
+                                    <div key={idx} className="course-box-premium">
+                                        <h4 className="course-name-premium">{course.courseName}</h4>
+                                        <ul className="course-item-list">
                                             {course.items.map((item, itemIdx) => (
-                                                <li key={itemIdx} className="menu-item">
-                                                    <div className="item-content">
-                                                        <span className="item-name">{item.name}</span>
+                                                <li key={itemIdx} className="menu-item-row">
+                                                    <div className="item-txt">
+                                                        <span className="item-name-premium">{item.name}</span>
                                                         {item.description && (
-                                                            <span className="item-desc">{item.description}</span>
-                                                        )}
-                                                        {item.features && item.features.length > 0 && (
-                                                            <div className="item-features">
-                                                                {item.features.map((f, i) => (
-                                                                    <span key={i} className="item-price-badge">{f}</span>
-                                                                ))}
-                                                            </div>
+                                                            <span className="item-desc-premium">{item.description}</span>
                                                         )}
                                                     </div>
                                                     {item.image && (
                                                         <div
-                                                            className="item-image-wrapper"
+                                                            className="item-thumb-premium"
                                                             onClick={() => handleImageClick(item.image!)}
                                                         >
-                                                            <img src={item.image} alt={item.name} className="item-image" />
-                                                            <div className="item-image-overlay">🔍</div>
+                                                            <img src={item.image} alt={item.name} />
                                                         </div>
                                                     )}
                                                 </li>
@@ -135,8 +119,7 @@ const MenuDetailModal = ({ menu, isOpen, onClose }: MenuDetailModalProps) => {
                         </div>
 
                         {menu.notes && menu.notes.length > 0 && (
-                            <div className="modal-notes">
-                                <h4>📌 안내사항</h4>
+                            <div className="modal-notes-premium">
                                 <ul>
                                     {menu.notes.map((note, idx) => (
                                         <li key={idx}>{note}</li>
@@ -145,13 +128,10 @@ const MenuDetailModal = ({ menu, isOpen, onClose }: MenuDetailModalProps) => {
                             </div>
                         )}
 
-                        <div className="modal-cta">
-                            <a href="/quote" className="btn btn-primary btn-lg">
-                                견적 문의하기
-                            </a>
-                            <a href="tel:0917-174-0251" className="btn btn-outline btn-lg">
-                                📞 전화 상담 (0906-423-7523)
-                            </a>
+                        <div className="modal-footer-actions">
+                            <Link to="/quote" className="btn btn-primary w-full">
+                                {t('services.getQuote')}
+                            </Link>
                         </div>
                     </div>
                 </div>

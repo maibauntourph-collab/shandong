@@ -4,26 +4,30 @@ import { useLanguage } from '../contexts/LanguageContext';
 import './Quote.css';
 
 interface QuoteFormData {
-    name: string;
-    email: string;
-    phone: string;
-    eventDate: string;
-    guestCount: string;
     eventType: string;
+    eventDate: string;
+    eventLocation: string;
+    guestCount: string;
+    cuisine: string;
     budget: string;
+    name: string;
+    phone: string;
+    facebookName: string;
     message: string;
 }
 
 const Quote = () => {
     const { t } = useLanguage();
     const [formData, setFormData] = useState<QuoteFormData>({
-        name: '',
-        email: '',
-        phone: '',
-        eventDate: '',
-        guestCount: '',
         eventType: '',
+        eventDate: '',
+        eventLocation: '',
+        guestCount: '',
+        cuisine: '',
         budget: '',
+        name: '',
+        phone: '',
+        facebookName: '',
         message: '',
     });
 
@@ -39,11 +43,12 @@ const Quote = () => {
                     guestCount: parseInt(data.guestCount) || 0,
                 }),
             });
-            if (!response.ok) throw new Error('제출에 실패했습니다.');
+            if (!response.ok) throw new Error('Failed to submit.');
             return response.json();
         },
         onSuccess: () => {
             setIsSubmitted(true);
+            window.scrollTo(0, 0);
         },
     });
 
@@ -57,24 +62,10 @@ const Quote = () => {
         submitMutation.mutate(formData);
     };
 
-    const eventTypes = [
-        'quote.eventTypes.wedding',
-        'quote.eventTypes.seminar',
-        'quote.eventTypes.corporate',
-        'quote.eventTypes.private',
-        'quote.eventTypes.garden',
-        'quote.eventTypes.gala',
-        'quote.eventTypes.other',
-    ];
-
-    const budgetRanges = [
-        'quote.budget.range1',
-        'quote.budget.range2',
-        'quote.budget.range3',
-        'quote.budget.range4',
-        'quote.budget.range5',
-        'quote.budget.unknown',
-    ];
+    const eventTypes = ['family', 'birthday', 'wedding', 'corporate', 'church', 'other'];
+    const locations = ['cebu', 'mandaue', 'lapulapu', 'other'];
+    const cuisines = ['korean', 'chinese', 'both'];
+    const budgetRanges = ['range1', 'range2', 'range3'];
 
     if (isSubmitted) {
         return (
@@ -86,12 +77,10 @@ const Quote = () => {
                 </section>
                 <section className="quote-success section">
                     <div className="container">
-                        <div className="success-card card">
-                            <div className="success-icon">✓</div>
-                            <h2>{t('quote.successTitle')}</h2>
-                            <p>
-                                {t('quote.successDesc')}
-                            </p>
+                        <div className="success-card card glass text-center max-w-2xl mx-auto">
+                            <div className="success-icon mb-6">✓</div>
+                            <h2 className="mb-4">{t('quote.successTitle')}</h2>
+                            <p className="mb-8">{t('quote.successDesc')}</p>
                             <button className="btn btn-primary" onClick={() => setIsSubmitted(false)}>
                                 {t('quote.newQuote')}
                             </button>
@@ -104,205 +93,186 @@ const Quote = () => {
 
     return (
         <div className="quote-page">
-            {/* Hero */}
             <section className="quote-hero">
-                <div className="container">
-                    <h1 className="page-title animate-fade-in-up">{t('quote.title')}</h1>
-                    <p className="page-subtitle animate-fade-in-up">
-                        {t('quote.subtitle')}
-                    </p>
+                <div className="hero-overlay"></div>
+                <div className="container relative z-10">
+                    <h1 className="page-title animate-fade-in-up mb-4">{t('quote.title')}</h1>
+                    <p className="page-subtitle animate-fade-in-up text-lg max-w-2xl">{t('quote.subtitle')}</p>
                 </div>
             </section>
 
-            {/* Form Section */}
             <section className="quote-form-section section">
                 <div className="container">
-                    <div className="quote-grid">
-                        <div className="quote-info">
-                            <h2>{t('quote.infoTitle')}</h2>
-                            <p>
-                                {t('quote.infoDesc')}
-                            </p>
+                    <form className="quote-form glass p-12 max-w-3xl mx-auto" onSubmit={handleSubmit}>
+                        <h2 className="section-title text-left mb-12">{t('quote.formTitle')}</h2>
 
-                            <div className="info-cards">
-                                <div className="info-card glass">
-                                    <span className="info-icon">⏰</span>
-                                    <div>
-                                        <h4>{t('quote.aiConsult')}</h4>
-                                        <p>{t('quote.aiDesc')}</p>
-                                    </div>
+                        {/* Step 1: Event Basics */}
+                        <div className="form-step mb-12">
+                            <h3 className="step-title-premium mb-6">01. Event Details</h3>
+                            <div className="form-grid-2">
+                                <div className="form-group">
+                                    <label className="form-label">{t('quote.eventType')} *</label>
+                                    <select
+                                        name="eventType"
+                                        className="form-input-premium"
+                                        value={formData.eventType}
+                                        onChange={handleChange}
+                                        required
+                                    >
+                                        <option value="">{t('quote.select')}</option>
+                                        {eventTypes.map(type => (
+                                            <option key={type} value={type}>{t(`quote.eventTypes.${type}`)}</option>
+                                        ))}
+                                    </select>
                                 </div>
-
-                                <div className="info-card glass">
-                                    <span className="info-icon">📞</span>
-                                    <div>
-                                        <h4>{t('contact.call')}</h4>
-                                        <p>02-1234-5678<br />{t('visit.weekday')} 09:00 - 18:00</p>
-                                    </div>
-                                </div>
-
-                                <div className="info-card glass">
-                                    <span className="info-icon">✉️</span>
-                                    <div>
-                                        <h4>{t('contact.email')}</h4>
-                                        <p>info@outcatering.kr</p>
-                                    </div>
+                                <div className="form-group">
+                                    <label className="form-label">{t('quote.eventDate')} *</label>
+                                    <input
+                                        type="date"
+                                        name="eventDate"
+                                        className="form-input-premium"
+                                        value={formData.eventDate}
+                                        onChange={handleChange}
+                                        required
+                                    />
                                 </div>
                             </div>
-
-                            <div className="quote-features">
-                                <h3>{t('quote.whyTitle')}</h3>
-                                <ul>
-                                    <li>✓ {t('quote.why1')}</li>
-                                    <li>✓ {t('quote.why2')}</li>
-                                    <li>✓ {t('quote.why3')}</li>
-                                    <li>✓ {t('quote.why4')}</li>
-                                    <li>✓ {t('quote.why5')}</li>
-                                </ul>
+                            <div className="form-group mt-6">
+                                <label className="form-label">{t('quote.eventLocation')} *</label>
+                                <select
+                                    name="eventLocation"
+                                    className="form-input-premium"
+                                    value={formData.eventLocation}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">{t('quote.select')}</option>
+                                    {locations.map(loc => (
+                                        <option key={loc} value={loc}>{t(`quote.locations.${loc}`)}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 
-                        <form className="quote-form card" onSubmit={handleSubmit}>
-                            <h3>{t('quote.formTitle')}</h3>
-
-                            <div className="form-row">
+                        {/* Step 2: Requirements */}
+                        <div className="form-step mb-12">
+                            <h3 className="step-title-premium mb-6">02. Requirements</h3>
+                            <div className="form-grid-2">
                                 <div className="form-group">
-                                    <label className="form-label" htmlFor="name">{t('quote.name')} *</label>
+                                    <label className="form-label">{t('quote.guestCount')} *</label>
+                                    <input
+                                        type="number"
+                                        name="guestCount"
+                                        className="form-input-premium"
+                                        placeholder="e.g. 50"
+                                        value={formData.guestCount}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">{t('quote.cuisine')} *</label>
+                                    <select
+                                        name="cuisine"
+                                        className="form-input-premium"
+                                        value={formData.cuisine}
+                                        onChange={handleChange}
+                                        required
+                                    >
+                                        <option value="">{t('quote.select')}</option>
+                                        {cuisines.map(c => (
+                                            <option key={c} value={c}>{t(`quote.cuisines.${c}`)}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-group mt-6">
+                                <label className="form-label">{t('quote.budget')} *</label>
+                                <select
+                                    name="budget"
+                                    className="form-input-premium"
+                                    value={formData.budget}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">{t('quote.select')}</option>
+                                    {budgetRanges.map(range => (
+                                        <option key={range} value={range}>{t(`quote.budget.${range}`)}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Step 3: Contact */}
+                        <div className="form-step mb-12">
+                            <h3 className="step-title-premium mb-6">03. Contact Information</h3>
+                            <div className="form-grid-2">
+                                <div className="form-group">
+                                    <label className="form-label">{t('quote.name')} *</label>
                                     <input
                                         type="text"
-                                        id="name"
                                         name="name"
-                                        className="form-input"
-                                        placeholder={t('quote.name')}
+                                        className="form-input-premium"
+                                        placeholder="Your Name"
                                         value={formData.name}
                                         onChange={handleChange}
                                         required
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label className="form-label" htmlFor="phone">{t('quote.phone')} *</label>
+                                    <label className="form-label">{t('quote.phone')} *</label>
                                     <input
                                         type="tel"
-                                        id="phone"
                                         name="phone"
-                                        className="form-input"
-                                        placeholder="010-0000-0000"
+                                        className="form-input-premium"
+                                        placeholder="09XX-XXX-XXXX"
                                         value={formData.phone}
                                         onChange={handleChange}
                                         required
                                     />
                                 </div>
                             </div>
-
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="email">{t('quote.email')} *</label>
+                            <div className="form-group mt-6">
+                                <label className="form-label">{t('quote.facebookName')}</label>
                                 <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    className="form-input"
-                                    placeholder="example@email.com"
-                                    value={formData.email}
+                                    type="text"
+                                    name="facebookName"
+                                    className="form-input-premium"
+                                    placeholder="Optional: For Messenger contact"
+                                    value={formData.facebookName}
                                     onChange={handleChange}
-                                    required
                                 />
                             </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label className="form-label" htmlFor="eventDate">{t('quote.eventDate')} *</label>
-                                    <input
-                                        type="date"
-                                        id="eventDate"
-                                        name="eventDate"
-                                        className="form-input"
-                                        value={formData.eventDate}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label className="form-label" htmlFor="guestCount">{t('quote.guestCount')} *</label>
-                                    <input
-                                        type="number"
-                                        id="guestCount"
-                                        name="guestCount"
-                                        className="form-input"
-                                        placeholder="50"
-                                        min="1"
-                                        value={formData.guestCount}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label className="form-label" htmlFor="eventType">{t('quote.eventType')} *</label>
-                                    <select
-                                        id="eventType"
-                                        name="eventType"
-                                        className="form-input form-select"
-                                        value={formData.eventType}
-                                        onChange={handleChange}
-                                        required
-                                    >
-                                        <option value="">{t('quote.select')}</option>
-                                        {eventTypes.map(key => (
-                                            <option key={key} value={t(key)}>{t(key)}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label className="form-label" htmlFor="budget">{t('quote.budget')}</label>
-                                    <select
-                                        id="budget"
-                                        name="budget"
-                                        className="form-input form-select"
-                                        value={formData.budget}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="">{t('quote.select')}</option>
-                                        {budgetRanges.map(key => (
-                                            <option key={key} value={t(key)}>{t(key)}</option>
-                                        ))}
-                                    </select>
-
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="message">{t('contact.message')}</label>
+                            <div className="form-group mt-6">
+                                <label className="form-label">{t('quote.message')}</label>
                                 <textarea
-                                    id="message"
                                     name="message"
-                                    className="form-input form-textarea"
-                                    placeholder={t('contact.message')}
+                                    className="form-input-premium form-textarea"
+                                    style={{ minHeight: '150px' }}
+                                    placeholder="Tell us about special requests, allergens, or venue details..."
                                     value={formData.message}
                                     onChange={handleChange}
                                 ></textarea>
                             </div>
+                        </div>
 
-                            <button
-                                type="submit"
-                                className="btn btn-primary btn-lg submit-btn"
-                                disabled={submitMutation.isPending}
-                            >
-                                {submitMutation.isPending ? t('contact.sending') : t('quote.submit')}
-                            </button>
+                        <button
+                            type="submit"
+                            className="btn btn-primary btn-lg w-full"
+                            disabled={submitMutation.isPending}
+                        >
+                            {submitMutation.isPending ? 'Processing...' : t('quote.submit')}
+                        </button>
 
-                            {submitMutation.isError && (
-                                <p className="error-message">
-                                    {t('common.error')}
-                                </p>
-                            )}
-
-                            <p className="form-note">
-                                {t('quote.note')}
+                        {submitMutation.isError && (
+                            <p className="error-message text-center mt-6" style={{ color: '#ff6b6b' }}>
+                                Submission failed. Please try again or call us directly.
                             </p>
-                        </form>
-                    </div>
+                        )}
+                        <p className="text-muted text-center mt-8 text-sm">
+                            {t('quote.note')}
+                        </p>
+                    </form>
                 </div>
             </section>
         </div>
