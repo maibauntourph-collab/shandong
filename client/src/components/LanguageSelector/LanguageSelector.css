@@ -5,19 +5,18 @@
 .language-toggle {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    gap: 8px;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     font-size: 0.85rem;
-    color: inherit;
+    color: var(--white);
 }
 
 .language-toggle:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     border-color: var(--gold);
 }
 
@@ -26,13 +25,14 @@
 }
 
 .lang-code {
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
 }
 
 .lang-arrow {
     font-size: 0.6rem;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
+    opacity: 0.5;
 }
 
 .lang-arrow.open {
@@ -41,15 +41,15 @@
 
 .language-dropdown {
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 12px);
     right: 0;
-    min-width: 140px;
-    background: var(--white);
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    min-width: 160px;
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     overflow: hidden;
     z-index: 1000;
-    animation: dropdownFadeIn 0.2s ease;
+    animation: dropdownFadeIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     list-style: none;
     padding: 8px;
     margin: 0;
@@ -58,7 +58,7 @@
 @keyframes dropdownFadeIn {
     from {
         opacity: 0;
-        transform: translateY(-8px);
+        transform: translateY(-10px);
     }
 
     to {
@@ -70,62 +70,38 @@
 .language-option {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px 16px;
     border: none;
     background: transparent;
     cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.15s ease;
-    color: var(--text-primary);
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
     font-size: 0.9rem;
+    text-align: left;
 }
 
 .language-option:hover {
-    background: var(--cream);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--gold);
 }
 
 .language-option.active {
-    background: var(--gradient-gold);
-    color: var(--white);
+    color: var(--gold);
+    font-weight: 700;
 }
 
 .language-option .lang-flag {
     font-size: 1.2rem;
 }
 
-.language-option .lang-name {
-    font-weight: 500;
-}
-
-/* 헤더 스크롤 시 스타일 */
-.nav-header.scrolled .language-toggle {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.1);
-}
-
-.nav-header.scrolled .language-toggle:hover {
-    background: rgba(0, 0, 0, 0.1);
-    border-color: var(--gold);
-}
-
-/* 모바일 */
 @media (max-width: 768px) {
-    .language-selector {
-        order: 1;
-    }
-
     .lang-code {
         display: none;
     }
 
     .language-toggle {
         padding: 8px;
-    }
-
-    .language-dropdown {
-        right: 0;
-        left: auto;
     }
 }

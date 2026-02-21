@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'wouter';
+import { Link, useLocation } from 'react-router-dom';
 import { LanguageSelector } from '../LanguageSelector';
-import ExchangeRateDisplay from '../ExchangeRateDisplay/ExchangeRateDisplay';
 import { useLanguage } from '../../contexts/LanguageContext';
 import './Navigation.css';
 
 const Navigation = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [location] = useLocation();
+    const location = useLocation();
     const { t } = useLanguage();
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
+            setIsScrolled(window.scrollY > 20);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -26,52 +25,70 @@ const Navigation = () => {
 
     const navLinks = [
         { href: '/', label: t('nav.home') },
-        { href: '/services', label: t('nav.services') },
-        { href: '/quote', label: t('nav.quote') },
+        { href: '/services', label: t('nav.menu') },
+        { href: '/quote', label: t('nav.catering') },
         { href: '/contact', label: t('nav.contact') },
     ];
 
     return (
-        <header className={`nav-header ${isScrolled ? 'scrolled' : ''}`}>
-            <nav className="nav-container container">
-                <Link href="/" className="nav-logo">
-                    <span className="logo-text">山東</span>
-                    <span className="logo-accent">CATERING</span>
-                </Link>
+        <>
+            <header className={`nav-header ${isScrolled ? 'scrolled' : ''}`}>
+                <nav className="nav-container container">
+                    <Link to="/" className="nav-logo-premium">
+                        <div className="logo-brush-container">
+                            <span className="logo-hanja-brush">山東</span>
+                            <div className="logo-text-stack">
+                                <span className="logo-brand-main">SHAN<span className="text-red">DONG</span></span>
+                                <span className="logo-brand-sub">KOREAN & CHINESE RESTAURANT</span>
+                            </div>
+                        </div>
+                    </Link>
 
-                <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
-                    {navLinks.map((link) => (
-                        <li key={link.href}>
-                            <Link
-                                href={link.href}
-                                className={`nav-link ${location === link.href ? 'active' : ''}`}
-                            >
-                                {link.label}
+                    <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
+                        {navLinks.map((link, index) => (
+                            <li key={`${link.href}-${index}`}>
+                                <Link
+                                    to={link.href}
+                                    className={`nav-link ${location.pathname === link.href ? 'active' : ''}`}
+                                >
+                                    {link.label}
+                                </Link>
+                            </li>
+                        ))}
+                        <li className="nav-cta">
+                            <Link to="/quote" className="btn btn-primary">
+                                {t('hero.cta.catering')}
                             </Link>
                         </li>
-                    ))}
-                    <li className="nav-cta">
-                        <Link href="/quote" className="btn btn-primary btn-sm">
-                            {t('hero.cta1')}
-                        </Link>
-                    </li>
-                </ul>
+                    </ul>
 
-                <div className="nav-actions">
-                    <ExchangeRateDisplay />
-                    <LanguageSelector />
-                    <button
-                        className={`nav-toggle ${isMobileMenuOpen ? 'active' : ''}`}
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label="Menu"
-                    >
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+                    <div className="nav-actions">
+                        <LanguageSelector />
+                        <button
+                            className={`nav-toggle ${isMobileMenuOpen ? 'active' : ''}`}
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Menu"
+                        >
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </nav>
+            </header>
+
+            {/* Mobile Bottom Navigation Strip */}
+            <div className="mobile-bottom-nav">
+                <div className="mobile-bottom-grid">
+                    <a href="tel:09151740251" className="mobile-nav-item call">
+                        <span>📞</span> {t('hero.cta.reserve')}
+                    </a>
+                    <Link to="/quote" className="mobile-nav-item quote">
+                        <span>💬</span> {t('hero.cta.catering')}
+                    </Link>
                 </div>
-            </nav>
-        </header>
+            </div>
+        </>
     );
 };
 

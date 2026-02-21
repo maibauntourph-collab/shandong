@@ -21,11 +21,12 @@ const Contact = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             });
-            if (!response.ok) throw new Error('전송에 실패했습니다.');
+            if (!response.ok) throw new Error('Failed to send.');
             return response.json();
         },
         onSuccess: () => {
             setIsSubmitted(true);
+            window.scrollTo(0, 0);
         },
     });
 
@@ -42,11 +43,11 @@ const Contact = () => {
     return (
         <div className="contact-page">
             {/* Hero */}
-            {/* Hero */}
             <section className="contact-hero">
-                <div className="container">
+                <div className="hero-overlay"></div>
+                <div className="container relative z-10">
                     <h1 className="page-title animate-fade-in-up">{t('contact.title')}</h1>
-                    <p className="page-subtitle animate-fade-in-up">
+                    <p className="page-subtitle animate-fade-in-up max-w-2xl">
                         {t('contact.subtitle')}
                     </p>
                 </div>
@@ -55,57 +56,57 @@ const Contact = () => {
             {/* Contact Info */}
             <section className="contact-info-section section">
                 <div className="container">
-                    <div className="contact-cards">
-                        <div className="contact-card card">
+                    <div className="contact-cards-premium">
+                        <div className="contact-card-premium glass">
                             <span className="contact-icon">📍</span>
                             <h3>{t('contact.visit')}</h3>
                             <p>
-                                서울특별시 강남구<br />
-                                테헤란로 123, 5층
+                                AS Fortuna Street,<br />
+                                Mandaue City, Cebu
                             </p>
                             <a
-                                href="https://map.naver.com"
+                                href="https://maps.google.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="card-link"
+                                className="premium-link"
                             >
-                                {t('contact.mapView')}
+                                {t('visit.directions')}
                             </a>
                         </div>
 
-                        <div className="contact-card card">
+                        <div className="contact-card-premium glass">
                             <span className="contact-icon">📞</span>
                             <h3>{t('contact.call')}</h3>
                             <p>
-                                02-1234-5678<br />
-                                {t('visit.weekday')} 09:00 - 18:00
+                                0915 174 0251<br />
+                                0906 423 7523
                             </p>
-                            <a href="tel:02-1234-5678" className="card-link">
-                                {t('contact.callAction')}
+                            <a href="tel:09151740251" className="premium-link">
+                                {t('hero.cta.reserve')}
                             </a>
                         </div>
 
-                        <div className="contact-card card">
+                        <div className="contact-card-premium glass">
                             <span className="contact-icon">✉️</span>
                             <h3>{t('contact.email')}</h3>
                             <p>
-                                info@outcatering.kr<br />
-                                24시간 이내 답변
+                                shandongcebu@gmail.com<br />
+                                info@shandong.com
                             </p>
-                            <a href="mailto:info@outcatering.kr" className="card-link">
-                                {t('contact.emailAction')}
+                            <a href="mailto:shandongcebu@gmail.com" className="premium-link">
+                                Send Email
                             </a>
                         </div>
 
-                        <div className="contact-card card">
+                        <div className="contact-card-premium glass">
                             <span className="contact-icon">💬</span>
                             <h3>{t('contact.kakao')}</h3>
                             <p>
-                                @산동레스토랑<br />
+                                ID: ShandongCebu<br />
                                 {t('contact.kakaoDesc')}
                             </p>
-                            <a href="#" className="card-link">
-                                {t('contact.kakaoAction')}
+                            <a href="#" className="premium-link">
+                                Open Chat
                             </a>
                         </div>
                     </div>
@@ -113,80 +114,64 @@ const Contact = () => {
             </section>
 
             {/* Map & Form */}
-            {/* Map & Form */}
             <section className="contact-form-section section">
                 <div className="container">
-                    <div className="contact-grid">
-                        {/* Map Placeholder */}
-                        <div className="map-container">
-                            <div className="map-placeholder">
-                                <span className="map-icon">🗺️</span>
-                                <p>{t('contact.mapPlaceholder')}</p>
-                                <a
-                                    href="https://map.naver.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-secondary"
-                                >
-                                    {t('contact.viewNaver')}
-                                </a>
+                    <div className="contact-grid-premium">
+                        {/* Map Holder */}
+                        <div className="map-wrapper-premium">
+                            <div className="map-visual-premium">
+                                <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=800&q=80" alt="Cebu Map Location" />
+                                <div className="map-labels">
+                                    <h4>{t('footer.restaurant_name')}</h4>
+                                    <p>AS Fortuna, Mandaue</p>
+                                </div>
                             </div>
-                            <div className="business-hours card">
-                                <h4>{t('contact.businessHours')}</h4>
+                            <div className="business-hours-premium glass">
+                                <h4>{t('footer.hours')}</h4>
                                 <ul>
                                     <li>
-                                        <span>{t('contact.monFri')}</span>
-                                        <span>09:00 - 18:00</span>
-                                    </li>
-                                    <li>
-                                        <span>{t('contact.sat')}</span>
-                                        <span>10:00 - 15:00</span>
-                                    </li>
-                                    <li>
-                                        <span>{t('contact.sunHol')}</span>
-                                        <span>{t('contact.closed')}</span>
+                                        <span>Mon - Sun</span>
+                                        <span>11:00 AM – 5:00 AM</span>
                                     </li>
                                 </ul>
-                                <p className="note">* {t('contact.alwaysOpen')}</p>
+                                <p className="note">* Open late night for the Cebu BPO & nightlife community</p>
                             </div>
                         </div>
 
                         {/* Contact Form */}
-                        <div className="contact-form-wrapper">
+                        <div className="contact-form-wrapper-premium">
                             {isSubmitted ? (
-                                <div className="success-message card">
-                                    <div className="success-icon">✓</div>
+                                <div className="success-message glass p-12 text-center">
+                                    <div className="success-emoji mb-6">✨</div>
                                     <h3>{t('contact.successTitle')}</h3>
-                                    <p>{t('contact.successDesc')}</p>
+                                    <p className="mb-8">{t('contact.successDesc')}</p>
                                     <button className="btn btn-primary" onClick={() => setIsSubmitted(false)}>
                                         {t('contact.newMessage')}
                                     </button>
                                 </div>
                             ) : (
-                                <form className="contact-form card" onSubmit={handleSubmit}>
-                                    <h3>{t('contact.formTitle')}</h3>
+                                <form className="contact-form-premium glass" onSubmit={handleSubmit}>
+                                    <h2 className="mb-8">{t('contact.formTitle')}</h2>
 
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="contact-name">{t('contact.name')} *</label>
+                                    <div className="form-group-premium">
+                                        <label className="form-label">{t('contact.name')} *</label>
                                         <input
                                             type="text"
-                                            id="contact-name"
                                             name="name"
-                                            className="form-input"
-                                            placeholder={t('contact.name')}
+                                            className="form-input-premium"
+                                            placeholder="Your Name"
                                             value={contactForm.name}
                                             onChange={handleChange}
                                             required
                                         />
                                     </div>
 
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="contact-email">{t('contact.email')} *</label>
+                                    <div className="form-group-premium">
+                                        <label className="form-label">{t('contact.email')} *</label>
                                         <input
                                             type="email"
-                                            id="contact-email"
                                             name="email"
-                                            className="form-input"
+                                            className="form-input-premium"
                                             placeholder="example@email.com"
                                             value={contactForm.email}
                                             onChange={handleChange}
@@ -194,27 +179,26 @@ const Contact = () => {
                                         />
                                     </div>
 
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="contact-subject">{t('contact.subject')} *</label>
+                                    <div className="form-group-premium">
+                                        <label className="form-label">{t('contact.subject')} *</label>
                                         <input
                                             type="text"
-                                            id="contact-subject"
                                             name="subject"
-                                            className="form-input"
-                                            placeholder={t('contact.subject')}
+                                            className="form-input-premium"
+                                            placeholder="Purpose of inquiry"
                                             value={contactForm.subject}
                                             onChange={handleChange}
                                             required
                                         />
                                     </div>
 
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="contact-message">{t('contact.message')} *</label>
+                                    <div className="form-group-premium">
+                                        <label className="form-label">{t('contact.message')} *</label>
                                         <textarea
-                                            id="contact-message"
                                             name="message"
-                                            className="form-input form-textarea"
-                                            placeholder={t('contact.message')}
+                                            className="form-input-premium"
+                                            style={{ minHeight: '150px' }}
+                                            placeholder="How can we help you?"
                                             value={contactForm.message}
                                             onChange={handleChange}
                                             required
@@ -223,7 +207,7 @@ const Contact = () => {
 
                                     <button
                                         type="submit"
-                                        className="btn btn-primary btn-lg submit-btn"
+                                        className="btn btn-primary btn-lg w-full mt-4"
                                         disabled={submitMutation.isPending}
                                     >
                                         {submitMutation.isPending ? t('contact.sending') : t('contact.send')}
@@ -236,34 +220,16 @@ const Contact = () => {
             </section>
 
             {/* FAQ Section */}
-            <section className="faq-section section">
+            <section className="faq-section section bg-matte">
                 <div className="container">
-                    <h2 className="section-title">{t('contact.faqTitle')}</h2>
-                    <div className="faq-list">
-                        <div className="faq-item card">
-                            <h4>{t('contact.faq1Q')}</h4>
-                            <p>
-                                {t('contact.faq1A')}
-                            </p>
-                        </div>
-                        <div className="faq-item card">
-                            <h4>{t('contact.faq2Q')}</h4>
-                            <p>
-                                {t('contact.faq2A')}
-                            </p>
-                        </div>
-                        <div className="faq-item card">
-                            <h4>{t('contact.faq3Q')}</h4>
-                            <p>
-                                {t('contact.faq3A')}
-                            </p>
-                        </div>
-                        <div className="faq-item card">
-                            <h4>{t('contact.faq4Q')}</h4>
-                            <p>
-                                {t('contact.faq4A')}
-                            </p>
-                        </div>
+                    <h2 className="section-title text-center mb-16">{t('contact.faqTitle')}</h2>
+                    <div className="faq-grid-premium">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className="faq-card-premium glass">
+                                <h4>{t(`contact.faq${i}Q`)}</h4>
+                                <p>{t(`contact.faq${i}A`)}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
