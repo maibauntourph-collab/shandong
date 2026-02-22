@@ -56,9 +56,9 @@ const Navigation = () => {
                             </li>
                         ))}
                         <li className="nav-cta">
-                            <Link to="/quote" className="btn btn-primary">
-                                {t('hero.cta.catering')}
-                            </Link>
+                            <a href="tel:09064237523" className="btn btn-primary">
+                                {t('hero.cta.delivery')}
+                            </a>
                         </li>
                     </ul>
 
@@ -80,11 +80,11 @@ const Navigation = () => {
             {/* Mobile Bottom Navigation Strip */}
             <div className="mobile-bottom-nav">
                 <div className="mobile-bottom-grid">
-                    <a href="tel:09151740251" className="mobile-nav-item call">
-                        <span>📞</span> {t('hero.cta.reserve')}
+                    <a href="tel:09064237523" className="mobile-nav-item call">
+                        <span>📞</span> {t('hero.cta.delivery')}
                     </a>
-                    <Link to="/quote" className="mobile-nav-item quote">
-                        <span>💬</span> {t('hero.cta.catering')}
+                    <Link to="/contact" className="mobile-nav-item quote">
+                        <span>📅</span> {t('hero.cta.reserve')}
                     </Link>
                 </div>
             </div>

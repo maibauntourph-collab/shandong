@@ -6,10 +6,9 @@ const Home = () => {
     const { t } = useLanguage();
 
     const dishes = [
-        { key: 'dish1', image: 'https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=1200&q=80' }, /* Jjamppong */
-        { key: 'dish2', image: 'https://images.unsplash.com/photo-1590671886400-8f8088b90703?auto=format&fit=crop&w=1200&q=80' }, /* Jajangmyeon */
-        { key: 'dish3', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80' }, /* Tangsuyuk */
-        { key: 'dish4', image: 'https://images.unsplash.com/photo-1623341214825-9f4f963727da?auto=format&fit=crop&w=1200&q=80' }, /* Shandong Chicken */
+        { key: 'sets', image: 'https://images.unsplash.com/photo-1541696490-8744a5db7f34?auto=format&fit=crop&w=1200&q=80' }, /* Sets A-E */
+        { key: 'tangsuyuk', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80' }, /* 5 Styles */
+        { key: 'specials', image: 'https://images.unsplash.com/photo-1590671886400-8f8088b90703?auto=format&fit=crop&w=1200&q=80' }, /* Jokbal */
     ];
 
     const cateringPackages = [
@@ -25,34 +24,29 @@ const Home = () => {
                 <div className="hero-overlay"></div>
                 <div className="container hero-container">
                     <div className="hero-content animate-fade-in-up">
+                        <span className="hero-status-badge">{t('hero.badge')}</span>
                         <h1 className="hero-headline">{t('hero.headline')}</h1>
                         <p className="hero-subheadline">{t('hero.subheadline')}</p>
                         <div className="hero-actions">
-                            <Link to="/contact" className="btn btn-primary">{t('hero.cta.reserve')}</Link>
-                            <Link to="/quote" className="btn btn-outline">{t('hero.cta.catering')}</Link>
+                            <a href="tel:09064237523" className="btn btn-primary btn-delivery">{t('hero.cta.delivery')}</a>
+                            <Link to="/contact" className="btn btn-gold-outline">{t('hero.cta.reserve')}</Link>
                         </div>
                         <p className="hero-trust">{t('hero.trust')}</p>
                     </div>
                 </div>
             </section>
 
-            {/* SECTION 2 — BRAND POSITIONING STRIP */}
-            <section className="positioning-strip diamond-overlay">
+            {/* SECTION 2 — COMPETITIVE ADVANTAGE BAR */}
+            <section className="advantage-bar-section diamond-overlay">
                 <div className="container strip-grid">
                     <div className="strip-item">
-                        <span className="strip-icon">🏮</span>
-                        <h3>{t('pos.heritage.title')}</h3>
-                        <p>{t('pos.heritage.desc')}</p>
+                        <p>{t('trust.delivery')}</p>
                     </div>
                     <div className="strip-item">
-                        <span className="strip-icon">🥢</span>
-                        <h3>{t('pos.dinein.title')}</h3>
-                        <p>{t('pos.dinein.desc')}</p>
+                        <p>{t('trust.location')}</p>
                     </div>
                     <div className="strip-item">
-                        <span className="strip-icon">🚚</span>
-                        <h3>{t('pos.catering.title')}</h3>
-                        <p>{t('pos.catering.desc')}</p>
+                        <p>{t('trust.payment')}</p>
                     </div>
                 </div>
             </section>
@@ -68,11 +62,11 @@ const Home = () => {
                         {dishes.map((dish) => (
                             <div key={dish.key} className="dish-card">
                                 <div className="dish-image-wrapper">
-                                    <img src={dish.image} alt={t(`signature.${dish.key}.name`)} />
+                                    <img src={dish.image} alt={t(`signature.${dish.key}`)} />
                                 </div>
                                 <div className="dish-content">
-                                    <h3>{t(`signature.${dish.key}.name`)}</h3>
-                                    <p>{t(`signature.${dish.key}.desc`)}</p>
+                                    <h3>{t(`signature.${dish.key}`)}</h3>
+                                    <p>{t(`signature.${dish.key}_desc`)}</p>
                                 </div>
                             </div>
                         ))}
@@ -147,9 +141,7 @@ const Home = () => {
                     <div className="story-content max-w-3xl mx-auto">
                         <h2 className="section-title mb-8">{t('heritage.title')}</h2>
                         <div className="story-text">
-                            {t('heritage.copy').split('. ').map((sentence, i) => (
-                                <p key={i} className="mb-4">{sentence}{sentence.endsWith('.') ? '' : '.'}</p>
-                            ))}
+                            <p>{t('heritage.copy')}</p>
                         </div>
                     </div>
                 </div>
@@ -161,12 +153,14 @@ const Home = () => {
                     <h2 className="section-title text-center mb-16">{t('social.title')}</h2>
                     <div className="testimonial-grid">
                         <div className="testimonial-card">
+                            <div className="review-stars">★★★★★</div>
                             <p className="review-text">"{t('social.review1.text')}"</p>
-                            <p className="review-author">— {t('social.review1.author')}</p>
+                            <p className="review-author">{t('social.review1.author')} <span className="source-tag">via Google Reviews</span></p>
                         </div>
                         <div className="testimonial-card">
+                            <div className="review-stars">★★★★★</div>
                             <p className="review-text">"{t('social.review2.text')}"</p>
-                            <p className="review-author">— {t('social.review2.author')}</p>
+                            <p className="review-author">{t('social.review2.author')} <span className="source-tag">via Google Reviews</span></p>
                         </div>
                     </div>
                     <div className="google-rating mt-12 text-center">
@@ -183,8 +177,8 @@ const Home = () => {
                         <h2 className="section-title mb-6">{t('final.cta.headline')}</h2>
                         <p className="final-copy mb-12">{t('final.cta.copy')}</p>
                         <div className="cta-actions">
-                            <Link to="/contact" className="btn btn-primary">{t('hero.cta.reserve')}</Link>
-                            <Link to="/quote" className="btn btn-outline">{t('hero.cta.catering')}</Link>
+                            <a href="tel:09064237523" className="btn btn-primary btn-delivery">{t('hero.cta.delivery')}</a>
+                            <Link to="/contact" className="btn btn-gold-outline">{t('hero.cta.reserve')}</Link>
                         </div>
                     </div>
                 </div>

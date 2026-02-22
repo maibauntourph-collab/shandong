@@ -8,16 +8,16 @@
 /* CSS Variables */
 :root {
   /* Colors - Shandong Premium Palette (Matte/Subtle) */
-  --primary: #7A0F0F;
-  /* Deep Crimson */
-  --primary-dark: #5A0A0A;
-  --bg-dark: #0B0B0B;
+  --primary: #B22222;
+  /* Imperial Red - Matches velvet seating */
+  --primary-dark: #8B0000;
+  --bg-dark: #0A0A0A;
   /* Near-Black */
   --surface: #1A1A1A;
   /* Matte Surface */
-  --gold: #D4AF37;
-  /* Warmer Metallic Gold */
-  --gold-dark: #B8860B;
+  --gold: #C5A059;
+  /* Golden Oak - Matches wood slats */
+  --gold-rgb: 197, 160, 89;
   --white: #F5F5F5;
 
   --text-primary: #F5F5F5;
@@ -174,12 +174,14 @@ button {
 }
 
 .btn-primary {
-  background-color: var(--gold);
-  color: var(--bg-dark);
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
 }
 
 .btn-primary:hover {
-  background-color: var(--gold-dark);
+  background-color: #8B0000;
+  border-color: #8B0000;
   transform: translateY(-2px);
 }
 

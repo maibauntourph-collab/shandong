@@ -79,8 +79,9 @@
 .contact-label {
     font-size: 0.75rem;
     text-transform: uppercase;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-weight: 800;
+    letter-spacing: 0.15em;
     margin-bottom: 0.25rem;
 }
 

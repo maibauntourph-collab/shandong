@@ -21,11 +21,15 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.contact': '연락처',
 
         // Hero
-        'hero.headline': '세부 최고의 정통 한식-중식 다이닝 & 케이터링',
-        'hero.subheadline': '식사는 단순히 에너지를 보충하는 것이 아니라 하나의 "경험"입니다. 산동의 수제 면과 시그니처 소스로 세부 최고의 미식 경험을 즐기세요.',
+        'hero.headline': 'SHANDONG: THE ART OF FIRE & SOUL',
+        'hero.subheadline': '산동의 전통에 뿌리를 둔 정통 한식-중식의 맛. 수제 면부터 시그니처 짬뽕까지, 세부 최고의 미식 경험을 제공합니다.',
+        'hero.badge': '심야 시간에도 가능합니다! 오전 4:00까지 영업 (라스트 오더: 04:00 AM)',
+        'hero.cta.delivery': '배달 주문하기',
         'hero.cta.reserve': '테이블 예약하기',
-        'hero.cta.catering': '케이터링 제안 요청',
-        'hero.trust': '⭐ 세부 미식가 평점 4.8 | 11AM - 5AM 연중무휴 영업',
+        'hero.trust': '⭐ 세부 미식가 평점 4.8 | 11AM - 4AM 연중무휴 영업',
+
+        'trust.location': '📍 A.S. Fortuna 쉘 주유소 지나서 30m',
+        'trust.payment': '📱 G-Cash 및 착불 현금 결제 가능',
 
         // Section 2 - Brand Positioning
         'pos.heritage.title': '한식-중식 요리 헤리티지',
@@ -37,7 +41,13 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Section 3 - Signature Dishes
         'signature.title': '고객들이 사랑하는 시그니처 메뉴',
-        'signature.intro': '모든 요리에는 우리의 유산이 담겨 있습니다 — 대담하고 균형 잡힌 공유를 위한 요리.',
+        'signature.intro': '모든 요리에는 우리의 유산이 담겨 있습니다 — 대담하고 균형 잡힌 공유를 위한 요리. (*Mini 메뉴는 매장 식사 시에만 가능합니다)',
+        'signature.sets': '울티메이트 세트 (SET A-E)',
+        'signature.sets_desc': '짜장면, 짬뽕, 탕수육의 완벽한 조합으로 즐기는 산동 최고의 구성 (₱800부터).',
+        'signature.tangsuyuk': '프리미엄 탕수육',
+        'signature.tangsuyuk_desc': '옛날 탕수육과 갈릭 탕수육을 포함한 5가지 스타일의 특별한 맛.',
+        'signature.specials': '산동 스페셜',
+        'signature.specials_desc': '정성을 다해 조리한 족발, 불족발, 도가니 수육 — 진정한 미식가를 위한 한식의 정수.',
         'signature.more': '전체 메뉴 보기',
         'signature.dish1.name': '짬뽕',
         'signature.dish1.desc': '깊고 시원한 맛의 얼큰한 해산물 국물 요리.',
@@ -57,9 +67,9 @@ const translations: Record<Language, Record<string, string>> = {
         'catering.proposal': '제안서 받기',
         'catering.corporate.badge': '기업 행사 최다 예약',
         'catering.trust': '세부의 수많은 가족, 기업, 이벤트 플래너들이 신뢰합니다.',
-        'catering.package.intimate.desc': '4~6인 소규모 모임에 적합 (짬뽕, 짜장면, 탕수육, 볶음밥 구성)',
-        'catering.package.celebration.desc': '10~12인 가족 및 친구 모임 (면 요리 3종, 시그니처 메인, 볶음밥)',
-        'catering.package.corporate.desc': '15~25인 오피스 이벤트 및 컨벤션 (엄선된 메인 요리, 채소, 볶음밥, 선택 옵션)',
+        'catering.package.intimate.desc': '4~6인 소규모 모임에 적합 (₱2,500부터) - 짬뽕, 짜장면, 탕수육, 볶음밥 구성',
+        'catering.package.celebration.desc': '10~12인 가족 및 친구 모임 (₱5,000부터) - 면 요리 3종, 시그니처 메인, 볶음밥',
+        'catering.package.corporate.desc': '15~25인 오피스 이벤트 (맞춤 견적 가능) - 엄선된 메인 요리, 채소, 볶음밥 구성',
 
         // Section 5 - Restaurant Experience
         'visit.headline': '세부 산동 레스토랑 방문하기',
@@ -71,9 +81,7 @@ const translations: Record<Language, Record<string, string>> = {
         'visit.reserve': '테이블 예약하기',
         'visit.directions': '길 찾기',
 
-        // Section 6 - Heritage Story
-        'heritage.title': '하나의 주방. 두 개의 전통. 끝없는 풍미.',
-        'heritage.copy': '우리의 이야기는 산동 요리의 대담한 맛과 한식의 정교한 균형에서 시작됩니다. 수년 동안 우리는 이러한 영향들을 결합해 왔으며, 세부의 입맛에 맞추면서도 정통성을 지켜왔습니다. 각 요리는 정성껏 준비된 수제 소스와 공유를 위해 고안된 오랜 기술로 만들어집니다. 이것은 모임을 위한 음식입니다.',
+        'heritage.copy': '우리의 이야기는 산동 요리의 강렬한 불맛과 한식의 정교한 균형에서 시작됩니다. 따스함과 편안함이 가득한 A.S. Fortuna의 다이닝 공간에서, 우리는 짜장 소스의 예술과 정통의 맛을 완성해 왔습니다. 세부의 다양한 입맛을 사로잡으면서도 뿌리를 지켜온 산동은 소중한 사람들과의 모임을 위한 최고의 선택입니다.',
 
         // Section 7 - Social Proof
         'social.title': '고객들의 이야기',
@@ -174,9 +182,10 @@ const translations: Record<Language, Record<string, string>> = {
         // Footer
         'footer.restaurant_name': '산동 레스토랑 & 케이터링',
         'footer.address': 'AS Fortuna, Mandaue City, Cebu',
-        'footer.phone': '0915 174 0251',
-        'footer.email': 'shandongcebu@gmail.com',
-        'footer.hours': '11AM - 5AM (월-일)',
+        'footer.address_detail': '30 meters past Shell Gas Station, A.S. Fortuna, Mandaue City',
+        'footer.phone_delivery': '0906-423-7523 (배달 문의)',
+        'footer.phone_gcash': '0915-174-0251 (G-Cash)',
+        'footer.hours_official': '오전 11:00 – 오전 04:00 (월-일)',
         'footer.copy': '© 2026 Shandong Restaurant',
 
         'quote.note': '* 표시된 항목은 필수입니다.',
@@ -191,11 +200,17 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.contact': 'Contact',
 
         // Hero
-        'hero.headline': 'Cebu’s Premier Korean–Chinese Dining & Catering Experience',
-        'hero.subheadline': 'FOOD is not just eating energy. It\'s an EXPERIENCE. Savor our handcrafted noodles and signature sauces — open until 5 AM for your late-night cravings.',
-        'hero.cta.reserve': 'Reserve a Table',
-        'hero.cta.catering': 'Request Catering Proposal',
-        'hero.trust': '⭐ Rated 4.8 by Cebu diners | Open 11 AM - 5 AM Daily',
+        'hero.headline': 'SHANDONG: THE ART OF FIRE & SOUL',
+        'hero.subheadline': 'From hand-pulled noodles to our signature wok-fired Jjamppong, we bring authentic Korean–Chinese flavors rooted in Shandong tradition to your table.',
+        'hero.badge': 'LATE-NIGHT CRAVINGS? OPEN UNTIL 4:00 AM (Last Order: 04:00 AM).',
+        'hero.cta.delivery': 'ORDER FOR DELIVERY',
+        'hero.cta.reserve': 'RESERVE A TABLE',
+        'hero.trust': '⭐ Rated 4.8 by Cebu diners | Open 11 AM - 4 AM Daily',
+
+        // Competitive Advantage Bar
+        'trust.delivery': '🚚 FREE DELIVERY within the A.S. Fortuna area.',
+        'trust.location': '📍 30m past Shell Gas Station, A.S. Fortuna, Mandaue City.',
+        'trust.payment': '📱 G-Cash & Cash on Delivery Accepted.',
 
         // Section 2 - Brand Positioning
         'pos.heritage.title': 'Korean–Chinese Culinary Heritage',
@@ -207,7 +222,13 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Section 3 - Signature Dishes
         'signature.title': 'Signature Dishes Loved by Our Guests',
-        'signature.intro': 'Every dish reflects our heritage — bold, balanced, and crafted for sharing.',
+        'signature.intro': 'Every dish reflects our heritage — bold, balanced, and crafted for sharing. (*Mini menus available for dine-in only)',
+        'signature.sets': 'The Ultimate Sets (SET A-E)',
+        'signature.sets_desc': 'The perfect combination of Jajangmyeon, Jjamppong, and Tangsuyuk starting at ₱800.',
+        'signature.tangsuyuk': 'Premium Tangsuyuk',
+        'signature.tangsuyuk_desc': 'Discover five distinct styles, including our Signature Yetnal (Old-fashioned) and Garlic Tangsuyuk.',
+        'signature.specials': 'Shandong Specials',
+        'signature.specials_desc': 'Hearty, traditional feasts featuring Jokbal, Bul Jokbal, and Dogani Suyoock braised to perfection.',
         'signature.more': 'Explore Full Menu',
         'signature.dish1.name': 'Jjamppong',
         'signature.dish1.desc': 'Spicy seafood noodle soup with deep, comforting heat.',
@@ -227,9 +248,9 @@ const translations: Record<Language, Record<string, string>> = {
         'catering.proposal': 'Get Proposal',
         'catering.corporate.badge': 'Most Booked for Corporate Events',
         'catering.trust': 'Trusted by Cebu families, offices, and event planners.',
-        'catering.package.intimate.desc': 'Ideal for 4–6 guests. Includes: Jjamppong, Jajangmyeon, Tangsu-yuk, Fried Rice',
-        'catering.package.celebration.desc': 'Perfect for 10–12 guests. Includes 3 noodle dishes, signature mains, rice',
-        'catering.package.corporate.desc': 'Designed for office events & conventions (15–25 pax). Includes curated mains, vegetables, rice, optional drinks',
+        'catering.package.intimate.desc': 'Ideal for 4–6 guests (Starts at ₱2,500). Includes: Jjamppong, Jajangmyeon, Tangsu-yuk, Fried Rice',
+        'catering.package.celebration.desc': 'Perfect for 10–12 guests (Starts at ₱5,000). Includes 3 noodle dishes, signature mains, rice',
+        'catering.package.corporate.desc': 'Designed for office events (Custom pricing available). Includes curated mains, vegetables, rice',
 
         // Section 5 - Restaurant Experience
         'visit.headline': 'Visit Our Dining Space in Cebu',
@@ -243,7 +264,7 @@ const translations: Record<Language, Record<string, string>> = {
 
         // Section 6 - Heritage Story
         'heritage.title': 'One Kitchen. Two Traditions. Endless Flavor.',
-        'heritage.copy': 'Our story begins with the bold flavors of Shandong cuisine and the refined balance of Korean culinary tradition. Over the years, we have brought these influences together — honoring authenticity while serving the tastes of Cebu. Each dish is prepared with care, house-made sauces, and time-tested techniques designed for sharing. This is food meant for gathering.',
+        'heritage.copy': 'Our story begins with the bold, wok-fired intensity of Shandong cuisine and the refined balance of Korean culinary tradition. Within our inviting A.S. Fortuna dining space—defined by warmth and comfort—we master the art of the dark sauce and the perfect crisp. Honoring authenticity while serving the diverse tastes of Cebu, this is food meant for gathering.',
 
         // Section 7 - Social Proof
         'social.title': 'What Our Guests Say',
@@ -344,9 +365,10 @@ const translations: Record<Language, Record<string, string>> = {
         // Footer
         'footer.restaurant_name': 'Shandong Restaurant & Catering',
         'footer.address': 'AS Fortuna, Mandaue City, Cebu',
-        'footer.phone': '0915 174 0251',
-        'footer.email': 'shandongcebu@gmail.com',
-        'footer.hours': '11 AM - 5 AM (Mon-Sun)',
+        'footer.address_detail': '30 meters past Shell Gas Station, A.S. Fortuna, Mandaue City',
+        'footer.phone_delivery': '0906-423-7523 (Delivery)',
+        'footer.phone_gcash': '0915-174-0251 (G-Cash)',
+        'footer.hours_official': '11:00 AM – 04:00 AM (Last Order: 04:00 AM)',
         'footer.copy': '© 2026 Shandong Restaurant',
 
         'quote.note': '* Required fields.',

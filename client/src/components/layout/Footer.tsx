@@ -36,23 +36,23 @@ const Footer = () => {
 
                     {/* Contact Info */}
                     <div className="footer-section">
-                        <h4 className="footer-title">{t('footer.contactMenu')}</h4>
+                        <h4 className="footer-title">Contact Information</h4>
                         <ul className="footer-contact">
                             <li>
                                 <span className="contact-label">Address:</span>
-                                <span>{t('footer.address')}</span>
+                                <span>{t('footer.address_detail')}</span>
                             </li>
                             <li>
-                                <span className="contact-label">{t('footer.phone')}:</span>
-                                <a href={`tel:${t('footer.phone')}`}>{t('footer.phone')}</a>
+                                <span className="contact-label">Delivery:</span>
+                                <a href="tel:09064237523">{t('footer.phone_delivery')}</a>
                             </li>
                             <li>
-                                <span className="contact-label">{t('footer.email')}:</span>
-                                <a href={`mailto:${t('footer.email')}`}>{t('footer.email')}</a>
+                                <span className="contact-label">G-Cash:</span>
+                                <a href="tel:09151740251">{t('footer.phone_gcash')}</a>
                             </li>
                             <li>
-                                <span className="contact-label">{t('footer.hours')}:</span>
-                                <span>{t('footer.hours')}</span>
+                                <span className="contact-label">Official Hours:</span>
+                                <span>{t('footer.hours_official')}</span>
                             </li>
                         </ul>
                     </div>

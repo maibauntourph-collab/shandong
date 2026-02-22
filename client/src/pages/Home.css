@@ -63,6 +63,19 @@
     max-width: 850px;
 }
 
+.hero-status-badge {
+    display: inline-block;
+    padding: 0.6rem 1.25rem;
+    background: var(--gold);
+    color: var(--bg-dark);
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin-bottom: 2rem;
+    border-radius: 2px;
+}
+
 .hero-headline {
     font-size: clamp(2.5rem, 6vw, var(--text-6xl));
     margin-bottom: 2rem;
@@ -85,6 +98,17 @@
     margin-bottom: 3.5rem;
 }
 
+.hero-actions .btn-delivery {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+.hero-actions .btn-delivery:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
 .hero-trust {
     font-size: 0.85rem;
     color: var(--gold);
@@ -94,43 +118,36 @@
     opacity: 0.9;
 }
 
-/* --- SECTION 2: POSITIONING STRIP --- */
-.positioning-strip {
-    background-color: var(--bg-dark);
-    padding: var(--space-12) 0;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+/* --- SECTION 2: ADVANTAGE BAR --- */
+.advantage-bar-section {
+    background-color: #0c0c0c;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
 }
 
-.strip-grid {
+.advantage-bar-section .strip-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-8);
+    gap: var(--space-4);
 }
 
-.strip-item {
+.advantage-bar-section .strip-item {
     text-align: center;
-    padding: 0 var(--space-8);
+    padding: var(--space-2) var(--space-4);
 }
 
-.strip-icon {
-    font-size: 2.25rem;
-    display: block;
-    margin-bottom: 1.25rem;
+.advantage-bar-section .strip-item:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.strip-item h3 {
-    font-size: 1rem;
-    color: var(--gold);
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
+.advantage-bar-section .strip-item p {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
     font-weight: 800;
-}
-
-.strip-item p {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.6;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0;
 }
 
 /* --- SECTION 3: SIGNATURE DISHES --- */
@@ -359,8 +376,15 @@
     border-radius: var(--border-radius);
 }
 
+.review-stars {
+    color: var(--gold);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.2em;
+}
+
 .review-text {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-family: var(--font-display);
     font-style: italic;
     margin-bottom: 2rem;
@@ -369,11 +393,22 @@
 }
 
 .review-author {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-weight: 800;
+    letter-spacing: 0.1em;
+    font-weight: 700;
     color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.source-tag {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
 }
 
 .rating-stars {
