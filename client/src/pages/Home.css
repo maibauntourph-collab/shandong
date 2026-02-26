@@ -47,20 +47,103 @@
     min-height: 700px;
     display: flex;
     align-items: center;
-    background: url('https://images.unsplash.com/photo-1541696490-8744a5db7f34?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-    background-attachment: fixed;
+    overflow: hidden;
+    /* Contain the zoom animation */
 }
 
+/* Smooth hero → dark section bridge */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(to bottom, transparent, var(--bg-dark));
+    z-index: 4;
+    pointer-events: none;
+}
+
+/* Cinematic hero background — animated on its own layer */
+/* 📌 AI-Generated: The Art of Fire & Soul — Shandong Restaurant Hero */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    /* Primary: AI-generated cinematic dark fire & wok hero image */
+    background-image:
+        url('/images/hero-bg.webp'),
+        url('/images/shandong_hero_bg_1772120666461.png'),
+        url('/images/hero-bg.jpg'),
+        /* Fallback: premium Unsplash wok/food photo */
+        url('https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: 65% center;
+    /* Shift right: fire/wok action on right, dark text space on left */
+    background-repeat: no-repeat;
+    animation: heroZoom 18s ease-in-out infinite alternate;
+    will-change: transform;
+    z-index: 0;
+}
+
+@keyframes heroZoom {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.06);
+    }
+}
+
+/* Dark cinematic overlay — ensures headline readability on dark fire image */
+/* Gradient: deep black (70%) on left text zone → transparent on right */
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 100%);
+    background:
+        /* Primary: left-to-right dark gradient for text legibility */
+        linear-gradient(to right,
+            rgba(0, 0, 0, 0.75) 0%,
+            /* ~75% black — left text zone */
+            rgba(0, 0, 0, 0.55) 40%,
+            /* mid-fade */
+            rgba(0, 0, 0, 0.25) 70%,
+            /* thinning */
+            rgba(0, 0, 0, 0.10) 100%
+            /* near-transparent right */
+        );
+    z-index: 1;
+}
+
+/* Bottom vignette — grounds the scene & reinforces brand depth */
+.hero-red-tint {
+    position: absolute;
+    inset: 0;
+    background:
+        /* Bottom-up dark vignette */
+        linear-gradient(to top,
+            rgba(0, 0, 0, 0.65) 0%,
+            rgba(0, 0, 0, 0.20) 30%,
+            transparent 60%),
+        /* Subtle Imperial Red ember glow on right — fire tint */
+        radial-gradient(ellipse at 80% 50%,
+            rgba(178, 34, 34, 0.12) 0%,
+            transparent 60%);
+    z-index: 2;
+}
+
+/* Left-weighted content block */
+.hero-container {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
 }
 
 .hero-content {
     position: relative;
-    z-index: 2;
-    max-width: 850px;
+    max-width: 760px;
+    padding-left: 0;
 }
 
 .hero-status-badge {
@@ -77,45 +160,60 @@
 }
 
 .hero-headline {
-    font-size: clamp(2.5rem, 6vw, var(--text-6xl));
-    margin-bottom: 2rem;
-    line-height: 1.1;
-    color: var(--white);
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    font-size: clamp(2.8rem, 6.5vw, var(--text-6xl));
+    margin-bottom: 1.75rem;
+    line-height: 1.05;
+    color: #FFFFFF;
+    /* Pure white — crisp on dark cinematic overlay */
+    text-shadow:
+        0 2px 24px rgba(0, 0, 0, 0.8),
+        0 0 60px rgba(178, 34, 34, 0.25);
+    /* subtle Imperial Red ember glow */
+    border-left: 4px solid var(--primary);
+    padding-left: 1.5rem;
+    margin-left: -1.5rem;
 }
 
 .hero-subheadline {
     font-size: var(--text-xl);
-    color: var(--text-secondary);
-    margin-bottom: 3.5rem;
-    max-width: 650px;
+    color: rgba(255, 255, 255, 0.85);
+    /* Soft white — legible on dark cinematic background */
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+    margin-bottom: 3rem;
+    max-width: 560px;
     line-height: 1.7;
 }
 
 .hero-actions {
     display: flex;
-    gap: 1.5rem;
-    margin-bottom: 3.5rem;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
 }
 
 .hero-actions .btn-delivery {
     background: var(--primary);
     border-color: var(--primary);
     color: var(--white);
+    box-shadow: 0 8px 32px rgba(178, 34, 34, 0.45);
 }
 
 .hero-actions .btn-delivery:hover {
     background: var(--primary-dark);
     border-color: var(--primary-dark);
+    box-shadow: 0 12px 40px rgba(178, 34, 34, 0.65);
+    transform: translateY(-3px);
 }
 
 .hero-trust {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--gold);
+    /* Gold trust line — visible on dark background */
     font-weight: 800;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     opacity: 0.9;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
 /* --- SECTION 2: ADVANTAGE BAR --- */
@@ -179,6 +277,8 @@
 .dish-image-wrapper {
     aspect-ratio: 4/5;
     overflow: hidden;
+    /* Explicit dimensions prevent CLS while image loads */
+    background: #111;
 }
 
 .dish-image-wrapper img {
@@ -186,6 +286,8 @@
     height: 100%;
     object-fit: cover;
     transition: transform 1s ease;
+    /* Prevent flash on lazy load */
+    will-change: transform;
 }
 
 .dish-card:hover .dish-image-wrapper img {
@@ -460,12 +562,22 @@
 }
 
 @media (max-width: 768px) {
+
+    /* Pause zoom on mobile for performance */
+    .hero-bg {
+        animation-play-state: paused;
+    }
+
     .hero-headline {
-        font-size: 2.75rem !important;
+        font-size: 2.4rem !important;
+        border-left: none;
+        padding-left: 0;
+        margin-left: 0;
     }
 
     .hero-subheadline {
-        font-size: 1.1rem !important;
+        font-size: 1.05rem !important;
+        max-width: 100%;
     }
 
     .section-title {
@@ -477,6 +589,11 @@
     .testimonial-grid {
         grid-template-columns: 1fr;
         gap: var(--space-12);
+    }
+
+    .hero-actions .btn-delivery {
+        width: 100%;
+        justify-content: center;
     }
 
     .hero-actions,

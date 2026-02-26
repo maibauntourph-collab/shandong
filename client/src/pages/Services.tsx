@@ -71,7 +71,15 @@ const Services = () => {
                                 onClick={() => handleMenuClick(service)}
                             >
                                 <div className="service-image-header">
-                                    <img src={service.image} alt={service.title} />
+                                    <img
+                                        src={service.image}
+                                        alt={service.title}
+                                        loading="lazy"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src =
+                                                'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjI4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC1zaXplPSIxNnB4IiBmaWxsPSIjNDQ0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zZW0iPlNoYW5kb25nIFJlc3RhdXJhbnQ8L3RleHQ+PC9zdmc+';
+                                        }}
+                                    />
                                     <div className="service-badge">{service.emoji}</div>
                                     <div className="image-overlay-premium">
                                         <span>{t('services.viewDetail')}</span>

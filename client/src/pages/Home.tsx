@@ -5,10 +5,15 @@ import './Home.css';
 const Home = () => {
     const { t } = useLanguage();
 
+    const FALLBACK_IMG = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC1zaXplPSIxNHB4IiBmaWxsPSIjNTU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zZW0iPlNoYW5kb25nIFJlc3RhdXJhbnQ8L3RleHQ+PC9zdmc+';
+
     const dishes = [
-        { key: 'sets', image: 'https://images.unsplash.com/photo-1541696490-8744a5db7f34?auto=format&fit=crop&w=1200&q=80' }, /* Sets A-E */
-        { key: 'tangsuyuk', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80' }, /* 5 Styles */
-        { key: 'specials', image: 'https://images.unsplash.com/photo-1590671886400-8f8088b90703?auto=format&fit=crop&w=1200&q=80' }, /* Jokbal */
+        /* Catering Sets A-E — Korean-Chinese banquet style dishes */
+        { key: 'sets', image: 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=1200&q=80' },
+        /* Tangsuyuk — Korean crispy fried pork with sweet & sour sauce */
+        { key: 'tangsuyuk', image: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=1200&q=80' },
+        /* Specials (Jokbal/premium dish) — aromatic stir-fry */
+        { key: 'specials', image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1200&q=80' },
     ];
 
     const cateringPackages = [
@@ -21,7 +26,11 @@ const Home = () => {
         <div className="home-page">
             {/* SECTION 1 — HERO */}
             <section className="hero-section">
+                {/* Cinematic background layer with slow zoom */}
+                <div className="hero-bg" aria-hidden="true"></div>
+                {/* Multi-layer overlay: dark base + Imperial Red tint */}
                 <div className="hero-overlay"></div>
+                <div className="hero-red-tint" aria-hidden="true"></div>
                 <div className="container hero-container">
                     <div className="hero-content animate-fade-in-up">
                         <span className="hero-status-badge">{t('hero.badge')}</span>
@@ -62,7 +71,12 @@ const Home = () => {
                         {dishes.map((dish) => (
                             <div key={dish.key} className="dish-card">
                                 <div className="dish-image-wrapper">
-                                    <img src={dish.image} alt={t(`signature.${dish.key}`)} />
+                                    <img
+                                        src={dish.image}
+                                        alt={t(`signature.${dish.key}`)}
+                                        loading="lazy"
+                                        onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
+                                    />
                                 </div>
                                 <div className="dish-content">
                                     <h3>{t(`signature.${dish.key}`)}</h3>
@@ -120,7 +134,13 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="experience-image">
-                            <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=1200&q=80" alt="Shandong Restaurant Interior" className="rounded-depth" />
+                            <img
+                                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80"
+                                alt="Shandong Restaurant Fine Dining Interior"
+                                className="rounded-depth"
+                                loading="lazy"
+                                onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
+                            />
                         </div>
                     </div>
                 </div>

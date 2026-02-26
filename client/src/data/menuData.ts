@@ -37,7 +37,7 @@ const menuData: Record<Language, ServiceMenu[]> = {
             features: ['4~6인 분량', '가성비 패키지', '대표 메뉴 포함', '배달 가능'],
             price: '₱3,500',
             emoji: '🏠',
-            image: 'https://images.unsplash.com/photo-1541544744-378c549f1b9a?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1583394293214-c5f4ef9e3e07?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: '포함 메뉴',
@@ -60,7 +60,7 @@ const menuData: Record<Language, ServiceMenu[]> = {
             features: ['10~12인 분량', '베스트셀러 모음', '다양한 메인 요리', '세부 전지역 배달'],
             price: '₱7,500',
             emoji: '🎉',
-            image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: '메인 메뉴',
@@ -90,7 +90,7 @@ const menuData: Record<Language, ServiceMenu[]> = {
             features: ['20인 이상', '맞춤형 메뉴 구성', '프리미엄 세팅', '법인 결제 지원'],
             price: '인당 ₱650~',
             emoji: '🏢',
-            image: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: '엄선된 메인 요리',
@@ -112,7 +112,7 @@ const menuData: Record<Language, ServiceMenu[]> = {
             features: ['당일 육수', '세부 신선 해산물', '수제 면'],
             price: '₱400',
             emoji: '🍜',
-            image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: '옵션',
@@ -135,7 +135,7 @@ const menuData: Record<Language, ServiceMenu[]> = {
             features: ['Serves 4–6', 'Value-focused', 'Best of Shandong', 'Ready for Delivery'],
             price: '₱3,500',
             emoji: '🏠',
-            image: 'https://images.unsplash.com/photo-1541544744-378c549f1b9a?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: 'Included Items',
@@ -158,7 +158,7 @@ const menuData: Record<Language, ServiceMenu[]> = {
             features: ['Serves 10–12', 'Bestsellers Bundle', 'Premium Mains', 'Cebu-wide Delivery'],
             price: '₱7,500',
             emoji: '🎉',
-            image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: 'Main Highlights',
@@ -188,7 +188,7 @@ const menuData: Record<Language, ServiceMenu[]> = {
             features: ['20+ Pax', 'Customizable Menu', 'Premium Setup', 'Corporate Billing Available'],
             price: 'From ₱650/pax',
             emoji: '🏢',
-            image: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: 'Main Selection',
@@ -207,10 +207,10 @@ const menuData: Record<Language, ServiceMenu[]> = {
             title: 'Signature Jjamppong',
             subtitle: 'The Soul of Shandong',
             description: 'Daily simmered broth paired with fresh catches from the Cebu sea.',
-            features: ['Fresh Dailly Broth', 'Cebu Fresh Seafood', 'Handmade Noodles'],
+            features: ['Fresh Daily Broth', 'Cebu Fresh Seafood', 'Handmade Noodles'],
             price: '₱400',
             emoji: '🍜',
-            image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80',
+            image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=800&q=80',
             courses: [
                 {
                     courseName: 'Variations',

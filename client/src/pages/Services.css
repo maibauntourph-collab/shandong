@@ -13,7 +13,10 @@
 .services-hero .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.6));
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.82) 0%,
+            rgba(0, 0, 0, 0.55) 60%,
+            rgba(0, 0, 0, 0.80) 100%);
 }
 
 /* Filter Premium */
@@ -69,6 +72,9 @@
     position: relative;
     height: 280px;
     overflow: hidden;
+    /* Prevent flash before image loads */
+    background: #111;
+    flex-shrink: 0;
 }
 
 .service-image-header img {
