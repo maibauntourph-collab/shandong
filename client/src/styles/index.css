@@ -41,12 +41,17 @@
   --text-6xl: 4.5rem;
 
   /* Spacing */
+  --space-4: 1rem;
   --space-8: 2rem;
   --space-12: 3rem;
   --space-16: 4rem;
   --space-20: 5rem;
   --space-24: 6rem;
   --space-32: 8rem;
+
+  /* Z-Index Scale */
+  --z-fixed: 1000;
+  --z-modal: 2000;
 
   /* Transitions */
   --transition-base: 400ms cubic-bezier(0.2, 0, 0.2, 1);
@@ -114,6 +119,29 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+  /* Prevent layout shift: stabilize before load */
+  object-fit: cover;
+  /* Smooth image reveal */
+  animation: imgReveal 0.5s ease forwards;
+}
+
+@keyframes imgReveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Image loading skeleton shimmer */
+img[loading="lazy"] {
+  background: linear-gradient(90deg,
+      #1a1a1a 25%,
+      #222 50%,
+      #1a1a1a 75%);
+  background-size: 200% 100%;
 }
 
 button {
@@ -177,12 +205,33 @@ button {
   background-color: var(--primary);
   border-color: var(--primary);
   color: var(--white);
+  box-shadow: 0 4px 16px rgba(178, 34, 34, 0.3);
 }
 
 .btn-primary:hover {
   background-color: #8B0000;
   border-color: #8B0000;
   transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(178, 34, 34, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(178, 34, 34, 0.4);
+}
+
+.btn-primary:disabled,
+.btn-primary[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Focus ring — premium gold accessibility indicator */
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
 }
 
 .btn-outline {
@@ -205,6 +254,38 @@ button {
 .btn-gold-outline:hover {
   background: var(--gold);
   color: var(--bg-dark);
+  box-shadow: 0 6px 24px rgba(197, 160, 89, 0.3);
+}
+
+.btn-gold-outline:active {
+  transform: translateY(0);
+}
+
+/* Gold filled variant */
+.btn-gold {
+  background: var(--gold);
+  color: var(--bg-dark);
+  border: 1px solid var(--gold);
+  font-weight: 900;
+}
+
+.btn-gold:hover {
+  background: #D4AF58;
+  border-color: #D4AF58;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(197, 160, 89, 0.4);
+}
+
+/* Small size modifier */
+.btn-sm {
+  padding: 0.85rem 1.75rem;
+  font-size: 0.75rem;
+}
+
+/* Large size modifier */
+.btn-lg {
+  padding: 1.5rem 3.5rem;
+  font-size: 0.9rem;
 }
 
 /* Cards */
@@ -252,4 +333,90 @@ button {
 .animate-fade-in-up {
   opacity: 0;
   animation: fadeInUp 0.8s ease forwards;
+}
+
+/* ===============================
+   UTILITY CLASSES
+   =============================== */
+
+.relative {
+  position: relative;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.p-12 {
+  padding: var(--space-12);
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mb-20 {
+  margin-bottom: 5rem;
+}
+
+.max-w-xl {
+  max-width: 36rem;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
+}
+
+.max-w-3xl {
+  max-width: 48rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Clickable card cursor */
+.clickable {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Page-level header typography */
+.page-title {
+  font-size: clamp(2.5rem, 6vw, var(--text-6xl));
+  color: var(--white);
+  margin-bottom: 1.5rem;
+}
+
+.page-subtitle {
+  font-size: var(--text-lg);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+  margin: 0 auto;
+}
+
+/* Section-level sub-heading */
+.section-title {
+  font-size: clamp(2rem, 4vw, var(--text-4xl));
+  color: var(--white);
+}
+
+.section-subtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.text-left {
+  text-align: left;
 }
