@@ -42,6 +42,9 @@ const upload = (0, multer_1.default)({
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/msword',
             'text/plain',
+            'image/jpeg',
+            'image/png',
+            'image/webp',
         ];
         if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);

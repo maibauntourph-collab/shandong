@@ -6,9 +6,12 @@ const Home = () => {
     const { t } = useLanguage();
 
     const dishes = [
-        { key: 'sets', image: 'https://images.unsplash.com/photo-1541696490-8744a5db7f34?auto=format&fit=crop&w=1200&q=80' }, /* Sets A-E */
-        { key: 'tangsuyuk', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80' }, /* 5 Styles */
-        { key: 'specials', image: 'https://images.unsplash.com/photo-1590671886400-8f8088b90703?auto=format&fit=crop&w=1200&q=80' }, /* Jokbal */
+        /* Ultimate Set — verified Jjajangmyeon (black bean) and Jjamppong spread */
+        { key: 'sets', image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=1200&q=80' },
+        /* Premium Tangsuyuk — crispy fried meat dish with sauce */
+        { key: 'tangsuyuk', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80' },
+        /* San Dong Special — verified Dumplings/Mandoo */
+        { key: 'specials', image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=1200&q=80' },
     ];
 
     const cateringPackages = [
@@ -62,11 +65,11 @@ const Home = () => {
                         {dishes.map((dish) => (
                             <div key={dish.key} className="dish-card">
                                 <div className="dish-image-wrapper">
-                                    <img src={dish.image} alt={t(`signature.${dish.key}`)} />
+                                    <img src={dish.image} alt={t(`signature.${dish.key} `)} />
                                 </div>
                                 <div className="dish-content">
-                                    <h3>{t(`signature.${dish.key}`)}</h3>
-                                    <p>{t(`signature.${dish.key}_desc`)}</p>
+                                    <h3>{t(`signature.${dish.key} `)}</h3>
+                                    <p>{t(`signature.${dish.key} _desc`)}</p>
                                 </div>
                             </div>
                         ))}
@@ -86,7 +89,7 @@ const Home = () => {
                     </div>
                     <div className="package-grid">
                         {cateringPackages.map((pkg) => (
-                            <div key={pkg.key} className={`package-card ${pkg.popular ? 'popular' : ''}`}>
+                            <div key={pkg.key} className={`package - card ${pkg.popular ? 'popular' : ''} `}>
                                 {pkg.badge && <span className="package-badge">{t('catering.corporate.badge')}</span>}
                                 <h3>{t(`catering.package.${pkg.key}.title`)}</h3>
                                 <p className="pax-count">{pkg.pax}</p>

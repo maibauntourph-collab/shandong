@@ -49,13 +49,20 @@ router.use(auth_js_1.authenticateToken);
 // Get all inquiries (admin)
 router.get('/', async (req, res) => {
     try {
-        const { status, page = '1', limit = '20' } = req.query;
+        const { status, page = '1', limit = '20', search } = req.query;
         const db = (0, db_js_1.getDB)();
         if (!db)
             throw new Error('DB not connected');
         const filter = {};
         if (status && status !== 'all') {
             filter.status = status;
+        }
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+                { phone: { $regex: search, $options: 'i' } }
+            ];
         }
         const skip = (parseInt(page) - 1) * parseInt(limit);
         const [inquiries, total] = await Promise.all([
@@ -104,10 +111,25 @@ router.get('/:id', async (req, res) => {
     }
 });
 // Update inquiry status
+const zod_1 = require("zod");
+const logisticsSchema = zod_1.z.object({
+    staffAssigned: zod_1.z.array(zod_1.z.string()),
+    vehicle: zod_1.z.string(),
+    equipment: zod_1.z.array(zod_1.z.string())
+});
+const updateSchema = zod_1.z.object({
+    status: zod_1.z.enum(['pending', 'contacted', 'confirmed', 'completed', 'cancelled']).optional(),
+    notes: zod_1.z.string().optional(),
+    eventLogistics: logisticsSchema.optional()
+});
 router.patch('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { status, notes } = req.body;
+        const validation = updateSchema.safeParse(req.body);
+        if (!validation.success) {
+            return res.status(400).json({ success: false, error: validation.error.message });
+        }
+        const { status, notes, eventLogistics } = req.body;
         const db = (0, db_js_1.getDB)();
         if (!db)
             throw new Error('DB not connected');
@@ -116,19 +138,21 @@ router.patch('/:id', async (req, res) => {
             updateData.status = status;
         if (notes !== undefined)
             updateData.notes = notes;
+        if (eventLogistics)
+            updateData.eventLogistics = eventLogistics;
         const result = await db.collection('inquiries').updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: updateData });
         if (result.matchedCount === 0) {
-            return res.status(404).json({ success: false, error: '문의를 찾을 수 없습니다.' });
+            return res.status(404).json({ success: false, error: 'Inquiry not found' });
         }
-        res.json({ success: true, message: '문의가 업데이트되었습니다.' });
+        res.json({ success: true, message: 'Inquiry updated' });
     }
     catch (error) {
         console.error('Update inquiry error:', error);
-        res.status(500).json({ success: false, error: '문의 업데이트 실패' });
+        res.status(500).json({ success: false, error: 'Failed to update inquiry' });
     }
 });
-// Delete inquiry
-router.delete('/:id', async (req, res) => {
+// Delete inquiry (owner only)
+router.delete('/:id', (0, auth_js_1.requireRole)('owner'), async (req, res) => {
     try {
         const { id } = req.params;
         const db = (0, db_js_1.getDB)();

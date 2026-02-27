@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
 });
 // Protect all following routes
 router.use(auth_js_1.authenticateToken);
-// Dashboard stats
+// Dashboard stats (legacy, kept for compatibility)
 router.get('/stats', async (req, res) => {
     try {
         const db = (0, db_js_1.getDB)();
@@ -87,7 +87,6 @@ router.get('/stats', async (req, res) => {
                 { $count: 'total' },
             ]).toArray().then(r => r[0]?.total || 0),
         ]);
-        // Recent inquiries
         const recentInquiries = await db.collection('inquiries')
             .find()
             .sort({ createdAt: -1 })
@@ -96,12 +95,7 @@ router.get('/stats', async (req, res) => {
         res.json({
             success: true,
             data: {
-                stats: {
-                    totalInquiries,
-                    pendingInquiries,
-                    totalDocuments,
-                    totalCustomers,
-                },
+                stats: { totalInquiries, pendingInquiries, totalDocuments, totalCustomers },
                 recentInquiries,
             },
         });
@@ -109,6 +103,107 @@ router.get('/stats', async (req, res) => {
     catch (error) {
         console.error('Stats error:', error);
         res.status(500).json({ success: false, error: '통계 조회 실패' });
+    }
+});
+// Action-oriented dashboard stats
+router.get('/action-stats', async (req, res) => {
+    try {
+        const db = (0, db_js_1.getDB)();
+        if (!db)
+            throw new Error('DB not connected');
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const endOfWeek = new Date(today);
+        endOfWeek.setDate(endOfWeek.getDate() + 7);
+        // 1. Pending orders
+        const [pendingCount, pendingNewest] = await Promise.all([
+            db.collection('inquiries').countDocuments({ status: 'pending' }),
+            db.collection('inquiries')
+                .find({ status: 'pending' })
+                .sort({ createdAt: -1 })
+                .limit(1)
+                .toArray()
+                .then(r => r[0]),
+        ]);
+        // 2. Menu alerts — find sold-out items across all menus
+        const allMenus = await db.collection('menus').find().toArray();
+        const soldOutItems = [];
+        for (const menu of allMenus) {
+            const m = menu;
+            if (m.courses) {
+                for (const course of m.courses) {
+                    for (const item of (course.items || [])) {
+                        if (item.isSoldOut) {
+                            soldOutItems.push(`${m.title} → ${item.name}`);
+                        }
+                    }
+                }
+            }
+        }
+        // 3. Upcoming events (confirmed inquiries with eventDate in next 7 days)
+        const upcomingEvents = await db.collection('inquiries')
+            .find({
+            status: { $in: ['confirmed', 'contacted'] },
+            eventDate: { $gte: today, $lte: endOfWeek },
+        })
+            .sort({ eventDate: 1 })
+            .toArray();
+        const todayEvents = upcomingEvents.filter((e) => {
+            const ed = new Date(e.eventDate);
+            return ed >= today && ed < new Date(today.getTime() + 86400000);
+        });
+        // 4. Low stock inventory
+        const lowStockItems = await db.collection('inventory')
+            .find({ $expr: { $lte: ['$quantity', '$threshold'] } })
+            .sort({ quantity: 1 })
+            .toArray();
+        // 5. Today's priorities: pending orders + today's events
+        const todayPriorities = await db.collection('inquiries')
+            .find({
+            $or: [
+                { status: 'pending' },
+                {
+                    status: { $in: ['confirmed', 'contacted'] },
+                    eventDate: { $gte: today, $lt: new Date(today.getTime() + 86400000) },
+                },
+            ],
+        })
+            .sort({ createdAt: -1 })
+            .limit(8)
+            .toArray();
+        res.json({
+            success: true,
+            data: {
+                pendingOrders: {
+                    count: pendingCount,
+                    newestName: pendingNewest?.name || null,
+                    newestDate: pendingNewest?.createdAt || null,
+                },
+                menuAlerts: {
+                    soldOutCount: soldOutItems.length,
+                    items: soldOutItems.slice(0, 5),
+                },
+                upcomingEvents: {
+                    thisWeek: upcomingEvents.length,
+                    today: todayEvents.length,
+                    nextEvent: upcomingEvents[0]?.eventDate || null,
+                },
+                lowStock: {
+                    count: lowStockItems.length,
+                    items: lowStockItems.slice(0, 5).map((i) => ({
+                        name: i.name,
+                        quantity: i.quantity,
+                        unit: i.unit,
+                        threshold: i.threshold,
+                    })),
+                },
+                todayPriorities,
+            },
+        });
+    }
+    catch (error) {
+        console.error('Action stats error:', error);
+        res.status(500).json({ success: false, error: '대시보드 데이터 조회 실패' });
     }
 });
 // Customer management - Get all customers
@@ -270,7 +365,7 @@ router.put('/notices/:id', async (req, res) => {
         res.status(500).json({ success: false, error: '공지사항 수정 실패' });
     }
 });
-router.delete('/notices/:id', async (req, res) => {
+router.delete('/notices/:id', (0, auth_js_1.requireRole)('owner'), async (req, res) => {
     try {
         const { id } = req.params;
         const db = (0, db_js_1.getDB)();
@@ -287,6 +382,34 @@ router.delete('/notices/:id', async (req, res) => {
     catch (error) {
         console.error('Delete notice error:', error);
         res.status(500).json({ success: false, error: '공지사항 삭제 실패' });
+    }
+});
+// Change Password
+router.put('/change-password', (0, auth_js_1.requireRole)('owner'), async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const username = req.user.username; // From authenticateToken middleware
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ success: false, error: '현재 비밀번호와 새 비밀번호를 입력해주세요.' });
+        }
+        const db = (0, db_js_1.getDB)();
+        if (!db)
+            throw new Error('DB not connected');
+        const user = await db.collection('adminUsers').findOne({ username });
+        if (!user) {
+            return res.status(404).json({ success: false, error: '사용자를 찾을 수 없습니다.' });
+        }
+        const isMatch = await bcryptjs_1.default.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, error: '현재 비밀번호가 일치하지 않습니다.' });
+        }
+        const hashedPassword = await bcryptjs_1.default.hash(newPassword, 10);
+        await db.collection('adminUsers').updateOne({ username }, { $set: { password: hashedPassword, updatedAt: new Date() } });
+        res.json({ success: true, message: '비밀번호가 성공적으로 변경되었습니다.' });
+    }
+    catch (error) {
+        console.error('Change password error:', error);
+        res.status(500).json({ success: false, error: '비밀번호 변경 실패' });
     }
 });
 exports.default = router;

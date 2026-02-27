@@ -12,6 +12,10 @@ const inquiries_js_1 = __importDefault(require("./routes/inquiries.js"));
 const documents_js_1 = __importDefault(require("./routes/documents.js"));
 const admin_js_1 = __importDefault(require("./routes/admin.js"));
 const exchange_rates_js_1 = __importDefault(require("./routes/exchange-rates.js"));
+const menus_js_1 = __importDefault(require("./routes/menus.js"));
+const gallery_js_1 = __importDefault(require("./routes/gallery.js"));
+const inventory_js_1 = __importDefault(require("./routes/inventory.js"));
+const analytics_js_1 = __importDefault(require("./routes/analytics.js"));
 const app = (0, express_1.default)();
 // Middleware
 app.use((0, cors_1.default)({
@@ -28,6 +32,10 @@ app.use('/api/inquiries', inquiries_js_1.default);
 app.use('/api/documents', documents_js_1.default);
 app.use('/api/admin', admin_js_1.default);
 app.use('/api/exchange-rates', exchange_rates_js_1.default);
+app.use('/api/menus', menus_js_1.default);
+app.use('/api/gallery', gallery_js_1.default);
+app.use('/api/inventory', inventory_js_1.default);
+app.use('/api/analytics', analytics_js_1.default);
 // Health check - UPDATED
 app.get('/api/health', (req, res) => {
     const dbStatus = mongoose_1.default.connection.readyState === 1 ? 'connected' : 'disconnected';
