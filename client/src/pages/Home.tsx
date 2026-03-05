@@ -73,14 +73,14 @@ const Home = () => {
                                 <div className="dish-image-wrapper">
                                     <img
                                         src={dish.image}
-                                        alt={t(`signature.${dish.key} `)}
+                                        alt={t(`signature.${dish.key}`)}
                                         loading="lazy"
                                         onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
                                     />
                                 </div>
                                 <div className="dish-content">
-                                    <h3>{t(`signature.${dish.key} `)}</h3>
-                                    <p>{t(`signature.${dish.key} _desc`)}</p>
+                                    <h3>{t(`signature.${dish.key}`)}</h3>
+                                    <p>{t(`signature.${dish.key}_desc`)}</p>
                                 </div>
                             </div>
                         ))}
