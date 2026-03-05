@@ -9,11 +9,11 @@ const Home = () => {
 
     const dishes = [
         /* Catering Sets A-E — Korean-Chinese banquet style dishes */
-        { key: 'sets', image: 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=1200&q=80' },
+        { key: 'sets', image: '/images/signature_sets.jpg' },
         /* Tangsuyuk — Korean crispy fried pork with sweet & sour sauce */
-        { key: 'tangsuyuk', image: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=1200&q=80' },
+        { key: 'tangsuyuk', image: '/images/signature_tangsuyuk.jpg' },
         /* Specials (Jokbal/premium dish) — aromatic stir-fry */
-        { key: 'specials', image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=1200&q=80' },
+        { key: 'specials', image: '/images/signature_specials.jpg' },
     ];
 
     const cateringPackages = [

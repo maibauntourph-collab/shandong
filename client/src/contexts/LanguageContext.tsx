@@ -42,7 +42,7 @@ const translations: Record<Language, Record<string, string>> = {
         // Section 3 - Signature Dishes
         'signature.title': '고객들이 사랑하는 시그니처 메뉴',
         'signature.intro': '모든 요리에는 우리의 유산이 담겨 있습니다 — 대담하고 균형 잡힌 공유를 위한 요리. (*Mini 메뉴는 매장 식사 시에만 가능합니다)',
-        'signature.sets': '울티메이트 세트 (SET A-E)',
+        'signature.sets': '울티메이트 세트',
         'signature.sets_desc': '짜장면, 짬뽕, 탕수육의 완벽한 조합으로 즐기는 산동 최고의 구성 (₱800부터).',
         'signature.tangsuyuk': '프리미엄 탕수육',
         'signature.tangsuyuk_desc': '옛날 탕수육과 갈릭 탕수육을 포함한 5가지 스타일의 특별한 맛.',
@@ -223,7 +223,7 @@ const translations: Record<Language, Record<string, string>> = {
         // Section 3 - Signature Dishes
         'signature.title': 'Signature Dishes Loved by Our Guests',
         'signature.intro': 'Every dish reflects our heritage — bold, balanced, and crafted for sharing. (*Mini menus available for dine-in only)',
-        'signature.sets': 'The Ultimate Sets (SET A-E)',
+        'signature.sets': 'The Ultimate Sets',
         'signature.sets_desc': 'The perfect combination of Jajangmyeon, Jjamppong, and Tangsuyuk starting at ₱800.',
         'signature.tangsuyuk': 'Premium Tangsuyuk',
         'signature.tangsuyuk_desc': 'Discover five distinct styles, including our Signature Yetnal (Old-fashioned) and Garlic Tangsuyuk.',
