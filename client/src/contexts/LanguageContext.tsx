@@ -376,15 +376,19 @@ const translations: Record<Language, Record<string, string>> = {
 
     ja: {
         'nav.home': 'ホーム',
-        'nav.services': '케이터링',
-        'nav.quote': '견적문의',
-        'nav.contact': '연락처',
-        'hero.headline': 'セブ最高の本格韓国風中華料理＆ケータリング',
+        'nav.services': 'ケータリング',
+        'nav.quote': '見積もり取得',
+        'nav.contact': 'お問い合わせ',
+        'hero.headline': 'SHANDONG: 炎と魂の芸術',
         'hero.reserve': 'テーブル予約',
         'hero.catering': 'ケータリング見積り',
         'visit.directions': 'アクセス',
-        'visit.reserve': 'テーブル予約',
+        'visit.reserve': '予約する',
         'footer.copy': '© 2026 Shandong Restaurant',
+        'signature.title': 'お客様に愛されるシグネチャー料理',
+        'signature.sets': '究極のセット',
+        'signature.tangsuyuk': 'プレミアム酢豚 (タンスユク)',
+        'signature.specials': '山東スペシャル',
     },
 
     zh: {
@@ -392,12 +396,16 @@ const translations: Record<Language, Record<string, string>> = {
         'nav.services': '餐饮服务',
         'nav.quote': '获取报价',
         'nav.contact': '联系我们',
-        'hero.headline': '宿务地区正宗韩式中华料理与餐饮服务',
+        'hero.headline': 'SHANDONG: 烈火与灵魂的艺术',
         'hero.reserve': '预订餐桌',
         'hero.catering': '获取餐饮报价',
         'visit.directions': '获取路线',
         'visit.reserve': '预订餐桌',
         'footer.copy': '© 2026 Shandong Restaurant',
+        'signature.title': '受食客喜爱的招牌菜',
+        'signature.sets': '终极套餐',
+        'signature.tangsuyuk': '精品糖醋肉',
+        'signature.specials': '山东特色菜',
     },
 };
 
@@ -418,7 +426,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }, [language]);
 
     const t = (key: string): string => {
-        return translations[language][key] || key;
+        // Fallback hierarchy: Current language -> English -> raw key string
+        return translations[language][key] || translations['en'][key] || key;
     };
 
     return (
