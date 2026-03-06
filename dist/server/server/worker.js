@@ -11,6 +11,18 @@ exports.default = {
             });
         }
         // Otherwise serve static assets
-        return env.ASSETS.fetch(request);
+        try {
+            const response = await env.ASSETS.fetch(request);
+            // If asset is not found (404), fallback to index.html for React Router
+            if (response.status === 404 || (!url.pathname.includes('.') && !url.pathname.startsWith('/api'))) {
+                const indexRequest = new Request(new URL('/index.html', request.url));
+                return await env.ASSETS.fetch(indexRequest);
+            }
+            return response;
+        }
+        catch (e) {
+            const indexRequest = new Request(new URL('/index.html', request.url));
+            return await env.ASSETS.fetch(indexRequest);
+        }
     }
 };
