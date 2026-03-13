@@ -24,6 +24,9 @@ const AdminCalendar = React.lazy(() => import('./pages/admin/AdminCalendar'));
 const AdminGallery = React.lazy(() => import('./pages/admin/AdminGallery'));
 const AdminInventory = React.lazy(() => import('./pages/admin/AdminInventory'));
 const AdminAnalytics = React.lazy(() => import('./pages/admin/AdminAnalytics'));
+const DishEditor = React.lazy(() => import('./pages/admin/cms/DishEditor'));
+const MenuEditor = React.lazy(() => import('./pages/admin/cms/MenuEditor'));
+const HomepageEditor = React.lazy(() => import('./pages/admin/cms/HomepageEditor'));
 import './App.css';
 
 function App() {
@@ -129,6 +132,30 @@ function App() {
                             element={
                                 <React.Suspense fallback={<div>Loading...</div>}>
                                     <AdminAnalytics />
+                                </React.Suspense>
+                            }
+                        />
+                        <Route
+                            path="/admin/cms/dishes"
+                            element={
+                                <React.Suspense fallback={<div>Loading...</div>}>
+                                    <DishEditor />
+                                </React.Suspense>
+                            }
+                        />
+                        <Route
+                            path="/admin/cms/menu"
+                            element={
+                                <React.Suspense fallback={<div>Loading...</div>}>
+                                    <MenuEditor />
+                                </React.Suspense>
+                            }
+                        />
+                        <Route
+                            path="/admin/cms/home"
+                            element={
+                                <React.Suspense fallback={<div>Loading...</div>}>
+                                    <HomepageEditor />
                                 </React.Suspense>
                             }
                         />

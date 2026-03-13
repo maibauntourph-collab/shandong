@@ -1,0 +1,29 @@
+[
+    {
+        "id": "sets",
+        "name": "The Ultimate Sets",
+        "description": "Premium Korean-Chinese banquet style sets perfect for sharing.",
+        "price": "₱2,500",
+        "image": "/images/signature_sets.jpg",
+        "category": "Signature",
+        "featured": true
+    },
+    {
+        "id": "tangsuyuk",
+        "name": "Premium Tangsuyuk",
+        "description": "Crispy fried pork with our secret sweet and sour glase.",
+        "price": "₱800",
+        "image": "/images/signature_tangsuyuk.jpg",
+        "category": "Signature",
+        "featured": true
+    },
+    {
+        "id": "specials",
+        "name": "Shandong Specials",
+        "description": "Aromatic stir-fried delicacies prepared by our master chefs.",
+        "price": "₱1,200",
+        "image": "/images/signature_specials.jpg",
+        "category": "Signature",
+        "featured": true
+    }
+]

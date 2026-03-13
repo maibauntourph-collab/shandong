@@ -1,0 +1,40 @@
+[
+    {
+        "id": 11,
+        "category": "packages",
+        "name": {
+            "ko": "인티메이트 게더링 패키지",
+            "en": "Intimate Gathering Package"
+        },
+        "subtitle": {
+            "ko": "Intimate Gathering (4-6 pax)",
+            "en": "Ideal for 4-6 Guests"
+        },
+        "description": {
+            "ko": "소규모 가족 모임이나 친구들과의 오붓한 저녁 식사를 위한 완벽한 구성.",
+            "en": "The perfect selection for small family dinners or cozy gatherings with friends."
+        },
+        "price": "₱3,500",
+        "image": "https://images.unsplash.com/photo-1541696490-8744a5db7f34?auto=format&fit=crop&w=800&q=80",
+        "featured": true
+    },
+    {
+        "id": 12,
+        "category": "packages",
+        "name": {
+            "ko": "셀레브레이션 피스트 패키지",
+            "en": "Celebration Feast Package"
+        },
+        "subtitle": {
+            "ko": "Celebration Feast (10-12 pax)",
+            "en": "Ideal for 10-12 Guests"
+        },
+        "description": {
+            "ko": "생일 파티나 특별한 축하 자리를 위한 풍성한 한식-중식 연회 요리.",
+            "en": "An expansive banquet designed for birthdays, anniversaries, and milestones."
+        },
+        "price": "₱7,500",
+        "image": "https://images.unsplash.com/photo-1590602846989-e99596d2a6ee?auto=format&fit=crop&w=800&q=80",
+        "featured": true
+    }
+]

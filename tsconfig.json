@@ -25,6 +25,9 @@
             ],
             "@shared/*": [
                 "./shared/*"
+            ],
+            "@content/*": [
+                "./content/*"
             ]
         },
         "baseUrl": "."

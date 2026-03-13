@@ -16,3 +16,6 @@ NODE_ENV = "production"
 MONGODB_URI = "mongodb+srv://maibauntourph_db_user:Admin1234@kennethempire.obmfscv.mongodb.net/outcatering?retryWrites=true&w=majority&appName=kennethempire"
 GEMINI_API_KEY = "AIzaSyB9bSw4CQ5aw-enPR10IjtpuVLqxYaTHlo"
 JWT_SECRET = "shandong-premium-secret-keep-secure"
+ADMIN_USERNAME = "admin"
+# NOTE: Set ADMIN_PASSWORD_HASH using:
+# npx wrangler secret put ADMIN_PASSWORD_HASH

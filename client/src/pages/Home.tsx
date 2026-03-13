@@ -1,20 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import dishesData from '@content/dishes/signature.json';
+import homepageData from '@content/homepage/content.json';
 import './Home.css';
 
 const Home = () => {
     const { t } = useLanguage();
 
-    const FALLBACK_IMG = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC1zaXplPSIxNHB4IiBmaWxsPSIjNTU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zZW0iPlNoYW5kb25nIFJlc3RhdXJhbnQ8L3RleHQ+PC9zdmc+';
+    const FALLBACK_IMG = '/assets/fallback-dish.jpg';
 
-    const dishes = [
-        /* Catering Sets A-E — Korean-Chinese banquet style dishes */
-        { key: 'sets', image: '/images/signature_sets.jpg' },
-        /* Tangsuyuk — Korean crispy fried pork with sweet & sour sauce */
-        { key: 'tangsuyuk', image: '/images/signature_tangsuyuk.jpg' },
-        /* Specials (Jokbal/premium dish) — aromatic stir-fry */
-        { key: 'specials', image: '/images/signature_specials.jpg' },
-    ];
+    // Filter for featured dishes if desired, or just use the list
+    const dishes = dishesData;
 
     const cateringPackages = [
         { key: 'intimate', pax: '4–6 guests' },
@@ -33,9 +29,9 @@ const Home = () => {
                 <div className="hero-red-tint" aria-hidden="true"></div>
                 <div className="container hero-container">
                     <div className="hero-content animate-fade-in-up">
-                        <span className="hero-status-badge">{t('hero.badge')}</span>
-                        <h1 className="hero-headline">{t('hero.headline')}</h1>
-                        <p className="hero-subheadline">{t('hero.subheadline')}</p>
+                        <span className="hero-status-badge">{homepageData.hero.badge}</span>
+                        <h1 className="hero-headline">{homepageData.hero.headline}</h1>
+                        <p className="hero-subheadline">{homepageData.hero.subheadline}</p>
                         <div className="hero-actions">
                             <a href="tel:09064237523" className="btn btn-primary btn-delivery">{t('hero.cta.delivery')}</a>
                             <Link to="/contact" className="btn btn-gold-outline">{t('hero.cta.reserve')}</Link>
@@ -68,19 +64,20 @@ const Home = () => {
                         <p className="section-intro">{t('signature.intro')}</p>
                     </div>
                     <div className="dish-grid">
-                        {dishes.map((dish) => (
-                            <div key={dish.key} className="dish-card">
+                        {dishes.map((dish: any) => (
+                            <div key={dish.id} className="dish-card">
                                 <div className="dish-image-wrapper">
                                     <img
                                         src={dish.image}
-                                        alt={t(`signature.${dish.key}`)}
+                                        alt={dish.name}
                                         loading="lazy"
                                         onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_IMG; }}
                                     />
                                 </div>
                                 <div className="dish-content">
-                                    <h3>{t(`signature.${dish.key}`)}</h3>
-                                    <p>{t(`signature.${dish.key}_desc`)}</p>
+                                    <h3>{dish.name}</h3>
+                                    <p>{dish.description}</p>
+                                    <span className="dish-price">{dish.price}</span>
                                 </div>
                             </div>
                         ))}
@@ -120,8 +117,8 @@ const Home = () => {
                 <div className="container">
                     <div className="experience-grid">
                         <div className="experience-content">
-                            <h2 className="section-title text-left mb-6">{t('visit.headline')}</h2>
-                            <p className="experience-copy mb-8">{t('visit.copy')}</p>
+                            <h2 className="section-title text-left mb-6">{homepageData.visit.headline}</h2>
+                            <p className="experience-copy mb-8">{homepageData.visit.copy}</p>
                             <ul className="highlight-list mb-12">
                                 <li>{t('visit.highlight1')}</li>
                                 <li>{t('visit.highlight2')}</li>

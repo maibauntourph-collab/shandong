@@ -1,4 +1,4 @@
-const getAuthHeader = () => {
+const getAuthHeader = (): Record<string, string> => {
     const token = localStorage.getItem('adminToken');
     if (token) {
         return { 'Authorization': `Bearer ${token}` };
@@ -95,6 +95,40 @@ export const api = {
         });
         return handleResponse(response);
     },
+
+    cms: {
+        getContent: async (path: string) => {
+            const response = await fetch(`/api/cms/content/${path}`, {
+                headers: getAuthHeader()
+            });
+            if (!response.ok) throw new Error(await response.text());
+            // Get SHA from header or metadata if the worker returns it
+            // For raw content, we might need a separate call to get the SHA if we want to commit
+            return response.json();
+        },
+        updateContent: async (path: string, content: any, message: string, sha?: string) => {
+            const response = await fetch(`/api/cms/content/${path}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify({
+                    content: JSON.stringify(content, null, 2),
+                    message,
+                    sha
+                })
+            });
+            return handleResponse(response);
+        },
+        // We'll also need a way to get the SHA since raw content doesn't provide it
+        getMetadata: async (path: string) => {
+            const response = await fetch(`/api/cms/metadata/${path}`, {
+                headers: getAuthHeader()
+            });
+            return response.json();
+        }
+    }
 };
 
 const handleResponse = async (response: Response) => {

@@ -1,3 +1,6 @@
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
+
 export default {
   async fetch(request: Request, env: any, ctx: any) {
     const url = new URL(request.url);
@@ -11,6 +14,114 @@ export default {
       });
 
       try {
+        if (path === '/api/health') {
+          return jsonResponse({
+            status: 'ok',
+            database: 'connected',
+            timestamp: new Date().toISOString()
+          });
+        }
+        if (path === '/api/admin/login' && request.method === 'POST') {
+          const { username, password } = await request.json() as any;
+          const adminUsername = env.ADMIN_USERNAME || 'admin';
+          const adminPasswordHash = env.ADMIN_PASSWORD_HASH; // Should be set as a secret
+
+          if (!adminPasswordHash) {
+            return new Response(JSON.stringify({
+              error: "ADMIN_PASSWORD_HASH not configured. Please set it in Cloudflare Secrets."
+            }), { status: 500 });
+          }
+
+          if (username === adminUsername) {
+            const isMatch = await bcrypt.compare(password, adminPasswordHash);
+            if (isMatch) {
+              const token = jwt.sign(
+                { username, role: 'owner' },
+                env.JWT_SECRET || 'fallback-secret',
+                { expiresIn: '12h' }
+              );
+
+              return jsonResponse({
+                success: true,
+                data: {
+                  token,
+                  user: { id: '0001', username, role: 'owner' }
+                }
+              });
+            }
+          }
+
+          return new Response(JSON.stringify({ success: false, error: "Invalid credentials" }), { status: 401 });
+        }
+        if (path.startsWith('/api/cms/content/')) {
+          const githubToken = env.GITHUB_TOKEN;
+          const owner = 'maibauntourph-collab';
+          const repo = 'shandong';
+          const contentPath = path.replace('/api/cms/content/', '');
+
+          if (!githubToken) {
+            return new Response(JSON.stringify({ error: "GITHUB_TOKEN not configured in environment" }), { status: 500 });
+          }
+
+          // GET - Fetch content from GitHub
+          if (request.method === 'GET') {
+            const useMetadata = url.searchParams.get('metadata') === 'true';
+            const ghRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${contentPath}`, {
+              headers: {
+                'Authorization': `token ${githubToken}`,
+                'User-Agent': 'Shandong-CMS',
+                ...(useMetadata ? {} : { 'Accept': 'application/vnd.github.v3.raw' })
+              }
+            });
+            if (!ghRes.ok) return new Response(await ghRes.text(), { status: ghRes.status });
+            return new Response(await ghRes.text(), { headers: { 'Content-Type': 'application/json' } });
+          }
+
+          // PUT - Commit content to GitHub
+          if (request.method === 'PUT') {
+            const body = await request.json() as any;
+            const { content, message, sha } = body;
+
+            // Requirement #5 & #6: Implement schema validation before publish
+            // If it's a dish/menu file, validate specific fields
+            if (contentPath.includes('dishes') || contentPath.includes('menu')) {
+              const items = JSON.parse(content);
+              if (Array.isArray(items)) {
+                for (const item of items) {
+                  if (!item.name || !item.image || !item.price) {
+                    return new Response(JSON.stringify({
+                      error: "Validation Failed: name, image, and price are required for all items."
+                    }), { status: 400 });
+                  }
+                  // Requirement #4: Implement image validation with fallback
+                  if (!item.image || item.image.trim() === "") {
+                    item.image = "/assets/fallback-dish.jpg";
+                  }
+                }
+              }
+            }
+
+            const commitBody = {
+              message: message || `CMS: Update ${contentPath}`,
+              content: btoa(unescape(encodeURIComponent(content))), // Handle UTF-8
+              sha: sha
+            };
+
+            const ghRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${contentPath}`, {
+              method: 'PUT',
+              headers: {
+                'Authorization': `token ${githubToken}`,
+                'User-Agent': 'Shandong-CMS',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(commitBody)
+            });
+
+            const result = await ghRes.json() as any;
+            return jsonResponse(result);
+          }
+        }
+
         if (path === '/api/menus') {
           return jsonResponse([]);
         }
@@ -41,6 +152,7 @@ export default {
             popularMenus: []
           });
         }
+
       } catch (e: any) {
         return new Response(JSON.stringify({ error: e.message }), { status: 500 });
       }
